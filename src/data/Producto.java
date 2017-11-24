@@ -110,7 +110,7 @@ public class Producto {
     }
 
     public String eliminar(Producto producto) {
-        String mensaje = "";
+        String mensaje;
         try (Connection conn = Conexion.conectar()) {
             CallableStatement query = conn.prepareCall("{call SP_EliminarProducto(?)}");
             query.setInt(1, producto.id_);
@@ -145,7 +145,6 @@ public class Producto {
     }
 
     public ResultSet mostrar() {
-        String mensaje = "";
         ResultSet rs;
         try (Connection conn = Conexion.conectar()) {
             CallableStatement query = conn.prepareCall("{call sp_MostrarProducto()}");
