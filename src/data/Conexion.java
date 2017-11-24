@@ -6,6 +6,10 @@ import java.sql.SQLException;
 
 class Conexion {
 
+    private Conexion(){
+        
+    }
+    
     public static Connection conectar() throws SQLException {
         final String dbUrl = "jdbc:mysql://localhost:3306/compra?useSSL=false";
         final String user = "student";
