@@ -1,13 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package business;
 
 import java.sql.ResultSet;
 
 public class Producto {
+
+    private Producto() {
+
+    }
 
     public static String insertar(String nombre, String descripcion, double precio,
             int unidadesStock, String tipoCodigo, char estatus) {

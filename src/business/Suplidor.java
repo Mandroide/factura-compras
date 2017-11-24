@@ -4,6 +4,10 @@ import java.sql.ResultSet;
 
 public class Suplidor {
 
+    private Suplidor(){
+        
+    }
+    
     public static String insertar(String empresa, String direccion, String ciudad, String email,
             String telefono, String codigoPostal, String pais, char estatus) {
         data.Suplidor suplidor = new data.Suplidor(empresa, direccion, ciudad, email,
