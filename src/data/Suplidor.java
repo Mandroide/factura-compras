@@ -59,23 +59,29 @@ public class Suplidor {
     public String insertar(Suplidor suplidor) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call SP_InsertarSuplidor(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-            query.registerOutParameter(1, JDBCType.INTEGER);
-            query.setString(2, suplidor.empresa_);
-            query.setString(3, suplidor.direccion_);
-            query.setString(4, suplidor.ciudad_);
-            query.setString(5, suplidor.email_);
-            query.setString(6, suplidor.telefono_);
-            query.setString(7, suplidor.codigoPostal_);
-            query.setString(8, suplidor.pais_);
-            query.setString(9, String.valueOf(suplidor.estatus_));
+            try (CallableStatement query = conn.prepareCall("{call SP_InsertarSuplidor(?, ?, ?, ?, ?, ?, ?, ?, ?)}")) {
+                query.registerOutParameter(1, JDBCType.INTEGER);
+                query.setString(2, suplidor.empresa_);
+                query.setString(3, suplidor.direccion_);
+                query.setString(4, suplidor.ciudad_);
+                query.setString(5, suplidor.email_);
+                query.setString(6, suplidor.telefono_);
+                query.setString(7, suplidor.codigoPostal_);
+                query.setString(8, suplidor.pais_);
+                query.setString(9, String.valueOf(suplidor.estatus_));
 
-            int tuplas = query.executeUpdate();
-            if (tuplas > 0) {
-                mensaje = "El registro ha sido agregado exitosamente.";
-                suplidor.id_ = query.getInt(1);
-            } else {
-                mensaje = "El registro no pudo ser agregado correctamente.";
+                int tuplas = query.executeUpdate();
+                if (tuplas > 0) {
+                    suplidor.id_ = query.getInt(1);
+                    mensaje = "El registro ha sido agregado exitosamente.";
+                } else {
+                    throw new SQLException("El registro no pudo ser agregado correctamente.\n");
+                }
+
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+                Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
+
             }
 
         } catch (SQLException ex) {
@@ -89,22 +95,27 @@ public class Suplidor {
     public String actualizar(Suplidor suplidor) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call sp_ActualizarSuplidor(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-            query.setInt(1, suplidor.id_); // Modificar
-            query.setString(2, suplidor.empresa_);
-            query.setString(3, suplidor.direccion_);
-            query.setString(4, suplidor.ciudad_);
-            query.setString(5, suplidor.email_);
-            query.setString(6, suplidor.telefono_);
-            query.setString(7, suplidor.codigoPostal_);
-            query.setString(8, suplidor.pais_);
-            query.setString(9, String.valueOf(suplidor.estatus_));
+            try (CallableStatement query = conn.prepareCall("{call SP_ActualizarSuplidor(?, ?, ?, ?, ?, ?, ?, ?, ?)}")) {
+                query.setInt(1, suplidor.id_); // Modificar
+                query.setString(2, suplidor.empresa_);
+                query.setString(3, suplidor.direccion_);
+                query.setString(4, suplidor.ciudad_);
+                query.setString(5, suplidor.email_);
+                query.setString(6, suplidor.telefono_);
+                query.setString(7, suplidor.codigoPostal_);
+                query.setString(8, suplidor.pais_);
+                query.setString(9, String.valueOf(suplidor.estatus_));
 
-            int tupla = query.executeUpdate();
-            if (tupla > 0) {
-                mensaje = "El registro ha sido eliminado exitosamente.";
-            } else {
-                mensaje = "El registro no pudo ser eliminado correctamente.";
+                boolean esEjecutado = (query.executeUpdate() > 0);
+                if (esEjecutado) {
+                    mensaje = "El registro ha sido actualizado exitosamente.";
+                } else {
+                    throw new SQLException("El registro no pudo ser actualizado correctamente.");
+                }
+
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+                Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } catch (SQLException ex) {
@@ -119,14 +130,19 @@ public class Suplidor {
     public String eliminar(Suplidor suplidor) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call SP_EliminarSuplidor(?)}");
-            query.setInt(1, suplidor.id_);
+            try (CallableStatement query = conn.prepareCall("{call SP_EliminarSuplidor(?)}")) {
+                query.setInt("id", suplidor.id_);
 
-            int tupla = query.executeUpdate();
-            if (tupla > 0) {
-                mensaje = "El registro ha sido eliminado exitosamente.";
-            } else {
-                mensaje = "El registro no pudo ser eliminado correctamente.";
+                int tupla = query.executeUpdate();
+                if (tupla > 0) {
+                    mensaje = "El registro ha sido eliminado exitosamente.";
+                } else {
+                    throw new SQLException("El registro no pudo ser eliminado correctamente.");
+                }
+
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+                Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
             mensaje = "La conexion a la base de datos no pudo ser realizada exitosamente.";
@@ -136,7 +152,7 @@ public class Suplidor {
         return mensaje;
 
     }
-    
+
     public ResultSet buscar(Suplidor suplidor) {
         ResultSet rs;
         try (Connection conn = Conexion.conectar()) {
@@ -164,7 +180,7 @@ public class Suplidor {
 
         return rs;
     }
-    
+
     public int getId() {
         return id_;
     }
