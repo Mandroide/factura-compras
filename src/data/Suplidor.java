@@ -80,7 +80,7 @@ public class Suplidor {
 
         } catch (SQLException ex) {
             mensaje = "La conexion a la base de datos no pudo ser realizada exitosamente.";
-            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return mensaje;
@@ -109,7 +109,7 @@ public class Suplidor {
 
         } catch (SQLException ex) {
             mensaje = "La conexion a la base de datos no pudo ser realizada exitosamente.";
-            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return mensaje;
@@ -130,7 +130,7 @@ public class Suplidor {
             }
         } catch (SQLException ex) {
             mensaje = "La conexion a la base de datos no pudo ser realizada exitosamente.";
-            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return mensaje;
@@ -144,7 +144,7 @@ public class Suplidor {
             query.setString(1, suplidor.textoABuscar_);
             rs = query.executeQuery();
         } catch (SQLException ex) {
-            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
             rs = null;
         }
 
@@ -158,7 +158,7 @@ public class Suplidor {
             rs = query.executeQuery();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
             rs = null;
         }
 
