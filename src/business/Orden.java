@@ -15,10 +15,10 @@ public class Orden {
     }
 
     // Sin verificar
-    public static String insertar(int numero, int suplidorId, LocalDate fecha, LocalDate fechaEnviada, double totalBruto,
-            double totalDescuento, double totalImpuesto, double totalCargo, double totalNeto, char estatus, ResultSet rs) {
+    public static String insertar(int numero, int suplidorId, LocalDate fecha, LocalDate fechaEnviada, /*double totalBruto,
+            double totalDescuento, double totalImpuesto, double totalCargo, double totalNeto,*/ char estatus, ResultSet rs) {
         data.Orden orden = new data.Orden(numero, suplidorId, fecha, fechaEnviada,
-                totalBruto, totalDescuento, totalImpuesto, totalCargo, totalNeto, estatus);
+                /*totalBruto, totalDescuento, totalImpuesto, totalCargo, totalNeto,*/ estatus);
 
         ArrayList<OrdenDetalle> detalles = new ArrayList<>();
 

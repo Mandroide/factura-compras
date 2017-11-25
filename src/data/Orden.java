@@ -30,23 +30,25 @@ public class Orden {
     }
 
     // Para insertar
-    public Orden(int numero, int suplidorId, LocalDate fecha, LocalDate fechaEnviada, double totalBruto,
-            double totalDescuento, double totalImpuesto, double totalCargo, double totalNeto, char estatus) {
+    public Orden(int numero, int suplidorId, LocalDate fecha, LocalDate fechaEnviada,/* double totalBruto,
+            double totalDescuento, double totalImpuesto, double totalCargo, double totalNeto,*/ char estatus) {
         numero_ = numero;
         suplidorId_ = suplidorId;
         fecha_ = fecha;
         fechaEnviada_ = fechaEnviada;
-        totalBruto_ = totalBruto;
-        totalDescuento_ = totalDescuento;
-        totalImpuesto_ = totalImpuesto;
-        totalCargo_ = totalCargo;
-        totalNeto_ = totalNeto;
+        estatus_ = estatus;
+        totalBruto_ = 0.00;
+        totalDescuento_ = 0.00;
+        totalImpuesto_ = 0.00;
+        totalCargo_ = 0.00;
+        totalNeto_ = 0.00;
     }
 
     // Para actualizar
+    @Deprecated
     public Orden(int id, int numero, int suplidorId, LocalDate fecha, LocalDate fechaEnviada, double totalBruto,
             double totalDescuento, double totalImpuesto, double totalCargo, double totalNeto, char estatus) {
-        this(numero, suplidorId, fecha, fechaEnviada, totalBruto, totalDescuento, totalImpuesto, totalCargo, totalNeto, estatus);
+        this(numero, suplidorId, fecha, fechaEnviada, estatus);
         id_ = id;
     }
 
@@ -57,46 +59,45 @@ public class Orden {
 
     // Listo. 
     public String insertar(Orden orden, ArrayList<OrdenDetalle> detalles) {
-        String mensaje;
+        String mensaje = "";
         try (Connection conn = Conexion.conectar()) {
             // Deshabilita auto transaccion.
             conn.setAutoCommit(false);
 
-            CallableStatement query = conn.prepareCall("{call SP_InsertarOrden(?, ?, ?, ?, ?, ?, ?)}");
-            query.registerOutParameter(1, JDBCType.INTEGER);
+            CallableStatement query = conn.prepareCall("{call SP_InsertarOrden(?, ?, ?, ?, ?)}");
+            query.registerOutParameter("id", JDBCType.INTEGER);
             query.setInt("suplidorId", orden.suplidorId_);
             query.setInt("numero", orden.numero_);
             query.setString("estatus", String.valueOf(orden.estatus_));
             query.setObject("fecha", orden.fecha_);
             query.setObject("fechaEnviada", orden.fechaEnviada_);
 
-            // Calculos en proceso.
-            query.setDouble("totalBruto", orden.totalBruto_);
-            query.setDouble("totalDescto", orden.totalDescuento_);
-            query.setDouble("totalImpuesto", orden.totalImpuesto_);
-            query.setDouble("totalCargo", orden.totalCargo_);
-            query.setDouble("totalNeto", totalNeto_);
-
-            int tuplas = query.executeUpdate();
-            if (tuplas > 0) {
-                mensaje = "El registro ha sido agregado exitosamente.";
+            boolean esEjecutado = (query.executeUpdate() > 0);
+            if (esEjecutado) {
                 orden.id_ = query.getInt(1);
 
-                boolean esNula = false;
+                boolean esConexionNula = false;
                 for (OrdenDetalle detalle : detalles) {
                     detalle.setIdOrden(orden.id_);
                     Connection conectado = detalle.insertar(null, conn);
-                    esNula = (conectado == null);
-                    if (esNula) {
+                    esConexionNula = (conectado == null);
+                    if (esConexionNula) {
                         conn.rollback();
                         break;
                     }
                 }
-                if (!esNula) {
-                    conn.commit();
+                if (!esConexionNula) {
+                    CallableStatement calcula = conn.prepareCall("{call SP_CalcularTotalOrden(?)}");
+                    calcula.setInt("id", orden.id_);
+                    esEjecutado = (calcula.executeUpdate() > 0);
+                    if (esEjecutado) {
+                        mensaje = "El registro ha sido agregado exitosamente.";
+                        conn.commit();
+                    }
                 }
-
-            } else {
+            }
+            // Si todas las consultas no son ejecutadas.
+            if (!esEjecutado){
                 conn.rollback();
                 mensaje = "El registro no pudo ser agregado correctamente.";
             }
@@ -116,11 +117,11 @@ public class Orden {
             CallableStatement query = conn.prepareCall("{call SP_EliminarOrden(?)}");
             query.setInt("id", orden.id_);
 
-            int tupla = query.executeUpdate();
-            if (tupla > 0) {
-                mensaje = "El registro ha sido eliminado exitosamente.";
+            boolean esEjecutado = (query.executeUpdate() > 0);
+            if (esEjecutado) {
+                mensaje = "La orden ha sido cancelada exitosamente.";
             } else {
-                mensaje = "El registro no pudo ser eliminado correctamente.";
+                mensaje = "La orden no pudo ser cancelada.";
             }
         } catch (SQLException ex) {
             mensaje = "La conexion a la base de datos no pudo ser realizada exitosamente.";
@@ -148,14 +149,14 @@ public class Orden {
 
     // Listo
     public ResultSet mostrarDetalles(int numero) {
-                                // Texto
+        // Texto
         ResultSet rs;
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call SP_BuscarSuplidor(?)}");
+            CallableStatement query = conn.prepareCall("{call SP_MostrarOrdenDetalle(?)}");
             query.setInt("numero", numero);
             rs = query.executeQuery();
         } catch (SQLException ex) {
-            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Orden.class.getName()).log(Level.SEVERE, null, ex);
             rs = null;
         }
 
