@@ -59,20 +59,18 @@ public class Suplidor {
     public String insertar(Suplidor suplidor) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call SP_InsertarSuplidor(?, ?, ?, ?, ?, ?, ?, ?, ?)}")) {
-                query.registerOutParameter(1, JDBCType.INTEGER);
-                query.setString(2, suplidor.empresa_);
-                query.setString(3, suplidor.direccion_);
-                query.setString(4, suplidor.ciudad_);
-                query.setString(5, suplidor.email_);
-                query.setString(6, suplidor.telefono_);
-                query.setString(7, suplidor.codigoPostal_);
-                query.setString(8, suplidor.pais_);
-                query.setString(9, String.valueOf(suplidor.estatus_));
+            try (CallableStatement query = conn.prepareCall("{call SP_InsertarSuplidor(?, ?, ?, ?, ?, ?, ?, ?)}")) {
+                query.setString("empresa", suplidor.empresa_);
+                query.setString("direccion", suplidor.direccion_);
+                query.setString("ciudad", suplidor.ciudad_);
+                query.setString("email", suplidor.email_);
+                query.setString("telefono", suplidor.telefono_);
+                query.setString("codigoPostal", suplidor.codigoPostal_);
+                query.setString("pais", suplidor.pais_);
+                query.setString("estatus", String.valueOf(suplidor.estatus_));
 
                 int tuplas = query.executeUpdate();
                 if (tuplas > 0) {
-                    suplidor.id_ = query.getInt(1);
                     mensaje = "El registro ha sido agregado exitosamente.";
                 } else {
                     throw new SQLException("El registro no pudo ser agregado correctamente.\n");
