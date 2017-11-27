@@ -94,15 +94,15 @@ public class Suplidor {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
             try (CallableStatement query = conn.prepareCall("{call SP_ActualizarSuplidor(?, ?, ?, ?, ?, ?, ?, ?, ?)}")) {
-                query.setInt(1, suplidor.id_); // Modificar
-                query.setString(2, suplidor.empresa_);
-                query.setString(3, suplidor.direccion_);
-                query.setString(4, suplidor.ciudad_);
-                query.setString(5, suplidor.email_);
-                query.setString(6, suplidor.telefono_);
-                query.setString(7, suplidor.codigoPostal_);
-                query.setString(8, suplidor.pais_);
-                query.setString(9, String.valueOf(suplidor.estatus_));
+                query.setInt("id", suplidor.id_); // Modificar
+                query.setString("empresa", suplidor.empresa_);
+                query.setString("direccion", suplidor.direccion_);
+                query.setString("ciudad", suplidor.ciudad_);
+                query.setString("email", suplidor.email_);
+                query.setString("telefono", suplidor.telefono_);
+                query.setString("codigoPostal", suplidor.codigoPostal_);
+                query.setString("pais", suplidor.pais_);
+                query.setString("estatus", String.valueOf(suplidor.estatus_));
 
                 boolean esEjecutado = (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -155,7 +155,7 @@ public class Suplidor {
         ResultSet rs;
         try (Connection conn = Conexion.conectar()) {
             CallableStatement query = conn.prepareCall("{call SP_BuscarSuplidor(?)}");
-            query.setString(1, suplidor.textoABuscar_);
+            query.setString("id", suplidor.textoABuscar_);
             rs = query.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);

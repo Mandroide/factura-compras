@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="438.0" minWidth="524.0" prefHeight="440.0" prefWidth="525.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainController">
+   <children>
+      <Button layoutX="141.0" layoutY="321.0" mnemonicParsing="false" onAction="#mostrarOrden" prefHeight="97.0" prefWidth="233.0" text="Ordenes">
+         <font>
+            <Font name="SansSerif Italic" size="19.0" />
+         </font>
+          <graphic>
+              <ImageView>
+                  <Image url="@/view/resources/ordenes.png">
+                  </Image>
+              </ImageView>
+          </graphic>
+      </Button>
+      <Button layoutX="138.0" layoutY="44.0" mnemonicParsing="false" onAction="#mostrarSuplidor" prefHeight="97.0" prefWidth="233.0" text="Suplidores">
+         <font>
+            <Font name="SansSerif Italic" size="19.0" />
+         </font>
+          <graphic>
+              <ImageView>
+                  <Image url="@/view/resources/consultarSuplidor.png">
+
+                  </Image>
+              </ImageView>
+          </graphic>
+      </Button>
+      <Button layoutX="138.0" layoutY="183.0" mnemonicParsing="false" onAction="#mostrarProducto" prefHeight="97.0" prefWidth="233.0" text="Productos">
+          <graphic>
+              <ImageView>
+                  <image>
+                      <Image url="@/view/resources/comprar.png">
+                      </Image>
+                  </image>
+              </ImageView>
+          </graphic>
+         <font>
+            <Font name="SansSerif Italic" size="19.0" />
+         </font>
+      </Button>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</Pane>
