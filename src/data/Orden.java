@@ -92,7 +92,7 @@ public class Orden {
 
     // Listo. 
     public String insertar(Orden orden, ObservableList<Producto> productos, HashMap<Producto, Integer> cantidad) {
-        String mensaje = "";
+        String mensaje;
         try (Connection conn = Conexion.conectar()) {
             try {
                 // Deshabilita auto transaccion.
@@ -107,13 +107,15 @@ public class Orden {
                 if (esEjecutado) {
                     orden.setId(query.get().getInt("id"));
                     insertarDetalles(conn, orden, productos, cantidad);
-                    CallableStatement calcula = conn.prepareCall("{call Orden_CalcularTotal(?)}");
+                    conn.commit(); // Confirma la transaccion.
+                    mensaje = "El registro ha sido agregado exitosamente.";
+/*                    CallableStatement calcula = conn.prepareCall("{call Orden_CalcularTotal(?)}");
                     calcula.setInt("id", orden.id_);
                     esEjecutado = (calcula.executeUpdate() > 0);
                     if (esEjecutado) {
                         conn.commit(); // Confirma la transaccion.
                         mensaje = "El registro ha sido agregado exitosamente.";
-                    }
+                    }*/
 
                 } else {
                     throw new SQLException();
@@ -213,9 +215,10 @@ public class Orden {
                 producto.setNombre(productoNombre);
                 final String productoDescripcion = resultSet.getString("descripcion");
                 producto.setDescripcion(productoDescripcion);
+                BigDecimal precio = resultSet.getBigDecimal("Precio");
+                producto.setPrecio(precio);
 
                 final int cantidad = resultSet.getInt("cantidad");
-                BigDecimal precio = resultSet.getBigDecimal("Precio");
                 BigDecimal descuento = resultSet.getBigDecimal("Descuento");
                 BigDecimal impuesto = resultSet.getBigDecimal("Impuesto");
                 BigDecimal neto = resultSet.getBigDecimal("Neto");

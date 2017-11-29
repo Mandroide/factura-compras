@@ -29,21 +29,21 @@ public class Producto {
     }
 
     // Para actualizar.
-    public Producto(int id, String nombre, String descripcion,
-                    BigDecimal precio, int unidadesStock, String codigo, String estatus) {
-        this(nombre, descripcion, precio, unidadesStock, codigo);
+    public Producto(int id, String codigo, String nombre, String descripcion,
+                    BigDecimal precio, int unidadesStock, String estatus) {
+        this(codigo, nombre, descripcion, precio, unidadesStock);
         setEstatus(estatus);
         setId(id);
     }
 
     // Para insertar
-    public Producto(String nombre, String descripcion,
-                    BigDecimal precio, int unidadesStock, String codigo) {
+    public Producto(String codigo, String nombre, String descripcion,
+                    BigDecimal precio, int unidadesStock) {
+        setCodigo(codigo);
         setNombre(nombre);
         setDescripcion(descripcion);
         setPrecio(precio);
         setUnidadesStock(unidadesStock);
-        setCodigo(codigo);
     }
 
     // Para buscar
@@ -60,11 +60,11 @@ public class Producto {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
             try (CallableStatement query = conn.prepareCall("{call Producto_insertar(?, ?, ?, ?, ?)}")) {
+                query.setString("codigo", producto.codigo_);
                 query.setString("nombre", producto.nombre_);
                 query.setString("descripcion", producto.descripcion_);
                 query.setBigDecimal("precio", producto.precio_);
                 query.setInt("unidadesStock", producto.unidadesStock_);
-                query.setString("codigo", producto.codigo_);
 
                 boolean esEjecutado =  (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -90,11 +90,11 @@ public class Producto {
         try (Connection conn = Conexion.conectar()) {
             try (CallableStatement query = conn.prepareCall("{call Producto_Actualizar(?, ?, ?, ?, ?, ?, ?)}")) {
                 query.setInt("id", producto.id_); // Modificar
+                query.setString("codigo", producto.codigo_);
                 query.setString("nombre", producto.nombre_);
                 query.setString("descripcion", producto.descripcion_);
                 query.setBigDecimal("precio", producto.precio_);
                 query.setInt("unidadesStock", producto.unidadesStock_);
-                query.setString("codigo", producto.codigo_);
                 query.setString("estatus", String.valueOf(producto.estatus_));
 
                 boolean esEjecutado = (query.executeUpdate() > 0);
@@ -153,7 +153,7 @@ public class Producto {
             final int unidadesStock = resultSet.getInt("ProductoUnidadesStock");
             final String estatus = resultSet.getString("ProductoEstatus");
             final String codigo = resultSet.getString("ProductoCodigo");
-            Producto obj = new Producto(no, nombre, descripcion, precio, unidadesStock, codigo, estatus);
+            Producto obj = new Producto(no, codigo, nombre, descripcion, precio, unidadesStock, estatus);
             data.add(obj);
         }
         return data;

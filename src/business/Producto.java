@@ -10,15 +10,15 @@ public class Producto {
 
     }
 
-    public static String insertar(String nombre, String descripcion, BigDecimal precio,
-                                  int unidadesStock, String codigo) {
-        data.Producto producto = new data.Producto(nombre, descripcion, precio, unidadesStock, codigo);
+    public static String insertar(String codigo, String nombre, String descripcion, BigDecimal precio,
+                                  int unidadesStock) {
+        data.Producto producto = new data.Producto(codigo, nombre, descripcion, precio, unidadesStock);
         return producto.insertar(producto);
     }
 
-    public static String actualizar(int id, String nombre, String descripcion, BigDecimal precio,
-                                    int unidadesStock, String codigo, String estatus) {
-        data.Producto producto = new data.Producto(id, nombre, descripcion, precio, unidadesStock, codigo, estatus);
+    public static String actualizar(int id, String codigo, String nombre, String descripcion, BigDecimal precio,
+                                    int unidadesStock, String estatus) {
+        data.Producto producto = new data.Producto(id, codigo, nombre, descripcion, precio, unidadesStock, estatus);
         return producto.actualizar(producto);
     }
 
