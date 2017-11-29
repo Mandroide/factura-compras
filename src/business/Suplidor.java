@@ -1,6 +1,6 @@
 package business;
 
-import java.sql.ResultSet;
+import javafx.collections.ObservableList;
 
 public class Suplidor {
 
@@ -8,17 +8,17 @@ public class Suplidor {
         
     }
     
-    public static String insertar(String empresa, String direccion, String ciudad, String email,
-            String telefono, String codigoPostal, String pais, char estatus) {
-        data.Suplidor suplidor = new data.Suplidor(empresa, direccion, ciudad, email,
-            telefono, codigoPostal, pais, estatus);
+    public static String insertar(String nombre, String direccion, String ciudad, String email,
+            String telefono, String codigoPostal, String pais) {
+        data.Suplidor suplidor = new data.Suplidor(nombre, direccion, ciudad, email,
+            telefono, codigoPostal, pais);
 
         return new data.Suplidor().insertar(suplidor);
     }
 
-    public static String actualizar(int id, String empresa, String direccion, String ciudad, String email,
-            String telefono, String codigoPostal, String pais, char estatus) {
-        data.Suplidor suplidor = new data.Suplidor(id, empresa, direccion, ciudad, email,
+    public static String actualizar(int id, String nombre, String direccion, String ciudad, String email,
+            String telefono, String codigoPostal, String pais, String estatus) {
+        data.Suplidor suplidor = new data.Suplidor(id, nombre, direccion, ciudad, email,
             telefono, codigoPostal, pais, estatus);
         return new data.Suplidor().actualizar(suplidor);
     }
@@ -28,12 +28,12 @@ public class Suplidor {
         return new data.Suplidor().eliminar(suplidor);
     }
 
-    public static ResultSet buscar(String textoABuscar) {
+    public static ObservableList<data.Suplidor> buscar(String textoABuscar) {
         data.Suplidor suplidor = new data.Suplidor(textoABuscar);
         return new data.Suplidor().buscar(suplidor);
     }
 
-    public static ResultSet mostrar() {
+    public static ObservableList<data.Suplidor> mostrar() {
         return new data.Suplidor().mostrar();
     }
 

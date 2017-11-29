@@ -1,9 +1,12 @@
 package data;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
-import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,10 +16,10 @@ public class Producto {
     private int id_;
     private String nombre_;
     private String descripcion_;
-    private double precio_;
+    private BigDecimal precio_;
     private int unidadesStock_;
-    private String tipoCodigo_;
-    private char estatus_;
+    private String codigo_;
+    private String estatus_;
 
     private String textoABuscar_;
 
@@ -27,50 +30,51 @@ public class Producto {
 
     // Para actualizar.
     public Producto(int id, String nombre, String descripcion,
-            double precio, int unidadesStock, String tipoCodigo, char estatus) {
-        this(nombre, descripcion, precio, unidadesStock, tipoCodigo, estatus);
-        id_ = id;
+                    BigDecimal precio, int unidadesStock, String codigo, String estatus) {
+        this(nombre, descripcion, precio, unidadesStock, codigo);
+        setEstatus(estatus);
+        setId(id);
     }
 
     // Para insertar
     public Producto(String nombre, String descripcion,
-            double precio, int unidadesStock, String tipoCodigo, char estatus) {
-        nombre_ = nombre;
-        descripcion_ = descripcion;
-        precio_ = precio;
-        unidadesStock_ = unidadesStock;
-        tipoCodigo_ = tipoCodigo;
-        estatus_ = estatus;
-        id_ = 0;
+                    BigDecimal precio, int unidadesStock, String codigo) {
+        setNombre(nombre);
+        setDescripcion(descripcion);
+        setPrecio(precio);
+        setUnidadesStock(unidadesStock);
+        setCodigo(codigo);
     }
 
     // Para buscar
     public Producto(String textoABuscar) {
-        textoABuscar_ = textoABuscar;
+        setTextoABuscar(textoABuscar);
     }
+
     // Para eliminar
     public Producto(int id){
-        id_ = id;
+        setId(id);
     }
-    
+
     public String insertar(Producto producto) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call sp_insertarProducto(?, ?, ?, ?, ?, ?, ?)}");
-            query.registerOutParameter(1, JDBCType.INTEGER);
-            query.setString(2, producto.nombre_);
-            query.setString(3, producto.descripcion_);
-            query.setDouble(4, producto.precio_);
-            query.setInt(5, producto.unidadesStock_);
-            query.setString(6, producto.tipoCodigo_);
-            query.setString(7, String.valueOf(producto.estatus_));
+            try (CallableStatement query = conn.prepareCall("{call Producto_insertar(?, ?, ?, ?, ?)}")) {
+                query.setString("nombre", producto.nombre_);
+                query.setString("descripcion", producto.descripcion_);
+                query.setBigDecimal("precio", producto.precio_);
+                query.setInt("unidadesStock", producto.unidadesStock_);
+                query.setString("codigo", producto.codigo_);
 
-            int tuplas = query.executeUpdate();
-            if (tuplas > 0) {
-                mensaje = "El registro ha sido agregado exitosamente.";
-                producto.id_ = query.getInt(1);
-            } else {
-                mensaje = "El registro no pudo ser agregado correctamente.";
+                boolean esEjecutado =  (query.executeUpdate() > 0);
+                if (esEjecutado) {
+                    mensaje = "El registro ha sido agregado exitosamente.";
+                } else {
+                    throw new SQLException("El registro no pudo ser agregado correctamente.");
+                }
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } catch (SQLException ex) {
@@ -84,22 +88,26 @@ public class Producto {
     public String actualizar(Producto producto) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call sp_ActualizarProducto(?, ?, ?, ?, ?, ?, ?)}");
-            query.setInt(1, producto.id_); // Modificar
-            query.setString(2, producto.nombre_);
-            query.setString(3, producto.descripcion_);
-            query.setDouble(4, producto.precio_);
-            query.setInt(5, producto.unidadesStock_);
-            query.setString(6, producto.tipoCodigo_);
-            query.setString(7, String.valueOf(producto.estatus_));
+            try (CallableStatement query = conn.prepareCall("{call Producto_Actualizar(?, ?, ?, ?, ?, ?, ?)}")) {
+                query.setInt("id", producto.id_); // Modificar
+                query.setString("nombre", producto.nombre_);
+                query.setString("descripcion", producto.descripcion_);
+                query.setBigDecimal("precio", producto.precio_);
+                query.setInt("unidadesStock", producto.unidadesStock_);
+                query.setString("codigo", producto.codigo_);
+                query.setString("estatus", String.valueOf(producto.estatus_));
 
-            int tupla = query.executeUpdate();
-            if (tupla > 0) {
-                mensaje = "El registro ha sido eliminado exitosamente.";
-            } else {
-                mensaje = "El registro no pudo ser eliminado correctamente.";
+                boolean esEjecutado = (query.executeUpdate() > 0);
+                if (esEjecutado) {
+                    mensaje = "El registro ha sido eliminado exitosamente.";
+                } else {
+                    throw new SQLException("El registro no pudo ser eliminado correctamente.");
+                }
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+
             }
-
         } catch (SQLException ex) {
             mensaje = "La conexion a la base de datos no pudo ser realizada exitosamente.";
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,15 +120,20 @@ public class Producto {
     public String eliminar(Producto producto) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call SP_EliminarProducto(?)}");
-            query.setInt(1, producto.id_);
+            try (CallableStatement query = conn.prepareCall("{call Producto_Eliminar(?)}")) {
+                query.setInt("id", producto.id_);
 
-            int tupla = query.executeUpdate();
-            if (tupla > 0) {
-                mensaje = "El registro ha sido eliminado exitosamente.";
-            } else {
-                mensaje = "El registro no pudo ser eliminado correctamente.";
+                boolean esEjecutado  = (query.executeUpdate() > 0);
+                if (esEjecutado) {
+                    mensaje = "El registro ha sido eliminado exitosamente.";
+                } else {
+                    throw new SQLException("El registro no pudo ser eliminado correctamente.");
+                }
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         } catch (SQLException ex) {
             mensaje = "La conexion a la base de datos no pudo ser realizada exitosamente.";
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
@@ -130,32 +143,45 @@ public class Producto {
 
     }
 
-    public ResultSet buscar(Producto producto) {
-        ResultSet rs;
-        try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call sp_BuscarProducto(?)}");
-            query.setString(1, producto.textoABuscar_);
-            rs = query.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
-            rs = null;
+    private ObservableList<Producto> leer(ResultSet resultSet) throws SQLException {
+        ObservableList<Producto> data = FXCollections.observableArrayList();
+        while (resultSet.next()) {
+            int no = resultSet.getInt("ProductoId");
+            final String nombre = resultSet.getString("ProductoNombre");
+            final String descripcion = resultSet.getString("ProductoDescripcion");
+            final BigDecimal precio = resultSet.getBigDecimal("ProductoPrecio");
+            final int unidadesStock = resultSet.getInt("ProductoUnidadesStock");
+            final String estatus = resultSet.getString("ProductoEstatus");
+            final String codigo = resultSet.getString("ProductoCodigo");
+            Producto obj = new Producto(no, nombre, descripcion, precio, unidadesStock, codigo, estatus);
+            data.add(obj);
         }
-
-        return rs;
+        return data;
     }
 
-    public ResultSet mostrar() {
-        ResultSet rs;
+    public ObservableList<Producto> buscar(Producto producto) {
+        ObservableList<Producto> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call sp_MostrarProducto()}");
-            rs = query.executeQuery();
-
+            CallableStatement query = conn.prepareCall("{call Producto_Buscar(?)}");
+            query.setString("nombre", producto.textoABuscar_);
+            data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
-            rs = null;
         }
 
-        return rs;
+        return data;
+    }
+
+    public ObservableList<Producto> mostrar() {
+        ObservableList<Producto> data = FXCollections.observableArrayList();
+        try (Connection conn = Conexion.conectar()) {
+            CallableStatement query = conn.prepareCall("{call Producto_Mostrar}");
+            data = leer(query.executeQuery());
+        } catch (SQLException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return data;
     }
 
     public int getId() {
@@ -170,7 +196,7 @@ public class Producto {
         return descripcion_;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio_;
     }
 
@@ -178,12 +204,43 @@ public class Producto {
         return unidadesStock_;
     }
 
-    public String getTipoCodigo() {
-        return tipoCodigo_;
+    public String getCodigo() {
+        return codigo_;
     }
 
-    public char getStatus() {
+    public String getEstatus() {
         return estatus_;
     }
 
+    public void setId(int id) {
+        id_ = id;
+    }
+
+    public void setNombre(String nombre) {
+        nombre_ = nombre;
+    }
+
+    public void setDescripcion(String descripcion) {
+        descripcion_ = descripcion;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        precio_ = precio;
+    }
+
+    public void setUnidadesStock(int unidadesStock) {
+        unidadesStock_ = unidadesStock;
+    }
+
+    public void setCodigo(String codigo) {
+        codigo_ = codigo;
+    }
+
+    public void setEstatus(String estatus) {
+        estatus_ = estatus;
+    }
+
+    public void setTextoABuscar(String textoABuscar) {
+        textoABuscar_ = textoABuscar;
+    }
 }

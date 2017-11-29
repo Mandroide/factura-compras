@@ -10,8 +10,8 @@ class Conexion {
         
     }
     
-    public static Connection conectar() throws SQLException {
-        final String dbUrl = "jdbc:mysql://localhost:3306/compra?useSSL=false";
+    static Connection conectar() throws SQLException {
+        final String dbUrl = "jdbc:mysql://127.0.0.1:3306/compra?useSSL=false";
         final String user = "student";
         final String password = "student123";
         return DriverManager.getConnection(dbUrl, user, password);

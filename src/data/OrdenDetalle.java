@@ -1,5 +1,6 @@
 package data;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.JDBCType;
@@ -12,11 +13,11 @@ public class OrdenDetalle {
     private short linea_;
     private int idOrden_;   // Orden
     private int idProducto_;    // Producto
-    private double precio_;
+    private BigDecimal precio_;
     private int cantidad_;
-    private double descuento_;
-    private double impuesto_;
-    private double neto_;
+    private BigDecimal descuento_;
+    private BigDecimal impuesto_;
+    private BigDecimal neto_;
 
     // Para realizar consultas a la base de datos.
     public OrdenDetalle() {
@@ -29,8 +30,8 @@ public class OrdenDetalle {
     }
 
     // Para insertar.
-    public OrdenDetalle(int idProducto, double precio, int cantidad,
-            double descuento, double impuesto, double neto) {
+    public OrdenDetalle(int idProducto, BigDecimal precio, int cantidad,
+            BigDecimal descuento, BigDecimal impuesto, BigDecimal neto) {
         idProducto_ = idProducto;
         precio_ = precio;
         cantidad_ = cantidad;
@@ -40,8 +41,8 @@ public class OrdenDetalle {
     }
 
     // Para actualizar
-    public OrdenDetalle(short linea, int idOrden, int idProducto, double precio, int cantidad,
-            double descuento, double impuesto, double neto) {
+    public OrdenDetalle(short linea, int idOrden, int idProducto, BigDecimal precio, int cantidad,
+            BigDecimal descuento, BigDecimal impuesto, BigDecimal neto) {
         this(idProducto, precio, cantidad, descuento, impuesto, neto); // Constructor de insercion.
         linea_ = linea;
     }
@@ -51,20 +52,18 @@ public class OrdenDetalle {
         Connection conexion = null;
         CallableStatement query;
         try {
-            query = conn.prepareCall("{call SP_InsertarOrdenDetalle(?, ?, ?, ?, ?, ?, ?, ?)}");
+            query = conn.prepareCall("{call OrdenDetalle_Insertar( ?, ?, ?, ?, ?, ?, ?)}");
             query.setInt("id", detalle.idOrden_);
-            query.registerOutParameter("linea", JDBCType.SMALLINT);
             query.setInt("productoId", detalle.idProducto_);
-            query.setDouble("precio", detalle.precio_);
+            query.setBigDecimal("precio", detalle.precio_);
             query.setInt("cantidad", detalle.cantidad_);
-            query.setDouble("neto", detalle.neto_);
-            query.setDouble("impuesto", detalle.impuesto_);
-            query.setDouble("descuento", detalle.descuento_);
+            query.setBigDecimal("neto", detalle.neto_);
+            query.setBigDecimal("impuesto", detalle.impuesto_);
+            query.setBigDecimal("descuento", detalle.descuento_);
 
             int tuplas = query.executeUpdate();
             if (tuplas > 0) {
                 conexion = conn;
-                detalle.linea_ = query.getShort("linea");
             }
 
         } catch (SQLException ex) {
@@ -90,7 +89,7 @@ public class OrdenDetalle {
         return idProducto_;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio_;
     }
 
@@ -98,15 +97,15 @@ public class OrdenDetalle {
         return cantidad_;
     }
 
-    public double getDescuento() {
+    public BigDecimal getDescuento() {
         return descuento_;
     }
 
-    public double getImpuesto() {
+    public BigDecimal getImpuesto() {
         return impuesto_;
     }
 
-    public double getNeto() {
+    public BigDecimal getNeto() {
         return neto_;
     }
 
