@@ -3,7 +3,10 @@ package data;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +25,6 @@ public class Suplidor {
     private String textoABuscar_;
 
     public Suplidor() {
-
     }
 
     // Para buscar
@@ -38,7 +40,8 @@ public class Suplidor {
     // Para actualizar
     public Suplidor(int id, String nombre, String direccion, String ciudad, String email,
             String telefono, String codigoPostal, String pais, String estatus) {
-        this(nombre, direccion, ciudad, email, telefono, codigoPostal, pais);
+        this(nombre, direccion, ciudad, email, telefono, codigoPostal, pais); // Constructor de insertar
+        setEstatus(estatus);
         setId(id);
     }
 
@@ -53,7 +56,6 @@ public class Suplidor {
         setCodigoPostal(codigoPostal);
         setPais(pais);
     }
-
 
     public String insertar(Suplidor suplidor) {
         String mensaje;
@@ -162,21 +164,16 @@ public class Suplidor {
         return data;
     }
 
-    private ObservableList<Suplidor> leer(ResultSet resultSet) throws SQLException{
+    public ObservableList<Suplidor> buscarActivos(Suplidor suplidor) {
         ObservableList<Suplidor> data = FXCollections.observableArrayList();
-        while (resultSet.next()) {
-            int no = resultSet.getInt("SuplidorId");
-            final String nombre = resultSet.getString("SuplidorNombre");
-            final String email = resultSet.getString("SuplidorEmail");
-            final String telefono = resultSet.getString("SuplidorTelefono");
-            final String direccion = resultSet.getString("SuplidorDireccion");
-            final String pais = resultSet.getString("SuplidorPais");
-            final String ciudad = resultSet.getString("SuplidorCiudad");
-            final String codigoPostal = resultSet.getString("SuplidorCodigoPostal");
-            final String estatus = resultSet.getString("SuplidorEstatus");
-            Suplidor suplidor = new Suplidor(no, nombre, direccion, ciudad, email, telefono, codigoPostal , pais, estatus);
-            data.add(suplidor);
+        try (Connection conn = Conexion.conectar()) {
+            CallableStatement query = conn.prepareCall("{call Suplidor_BuscarActivos(?)}");
+            query.setString("nombre", suplidor.textoABuscar_);
+            data = leer(query.executeQuery());
+        } catch (SQLException ex) {
+            Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return data;
     }
 
@@ -189,6 +186,45 @@ public class Suplidor {
             Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         return data;
+    }
+
+    public ObservableList<Suplidor> mostrarActivos() {
+        ObservableList<Suplidor> data = FXCollections.observableArrayList();
+        try (Connection conn = Conexion.conectar()) {
+            CallableStatement query = conn.prepareCall("{call Suplidor_MostrarActivos}");
+            data = leer(query.executeQuery());
+        } catch (SQLException ex) {
+            Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return data;
+    }
+
+    private ObservableList<Suplidor> leer(ResultSet resultSet) throws SQLException {
+        ObservableList<Suplidor> data = FXCollections.observableArrayList();
+        while (resultSet.next()) {
+            Suplidor suplidor = crear(resultSet);
+            try {
+                final String estatus = resultSet.getString("Estatus");
+                suplidor.setEstatus(estatus);
+            } catch (SQLException e) {
+            }
+            data.add(suplidor);
+        }
+        return data;
+    }
+
+    private Suplidor crear(ResultSet resultSet) throws SQLException {
+        int no = resultSet.getInt("Id");
+        final String nombre = resultSet.getString("Nombre");
+        final String email = resultSet.getString("Email");
+        final String telefono = resultSet.getString("Telefono");
+        final String direccion = resultSet.getString("Direccion");
+        final String pais = resultSet.getString("Pais");
+        final String ciudad = resultSet.getString("Ciudad");
+        final String codigoPostal = resultSet.getString("Codigo_Postal");
+        Suplidor suplidor = new Suplidor(nombre, direccion, ciudad, email, telefono, codigoPostal, pais);
+        suplidor.setId(no);
+        return suplidor;
     }
 
     public int getId() {
@@ -228,42 +264,43 @@ public class Suplidor {
     }
 
     public void setId(int id) {
-        this.id_ = id;
+        id_ = id;
     }
 
     public void setNombre(String nombre) {
-        this.nombre_ = nombre;
+        nombre_ = nombre;
     }
 
     public void setDireccion(String direccion) {
-        this.direccion_ = direccion;
+        direccion_ = direccion;
     }
 
     public void setCiudad(String ciudad) {
-        this.ciudad_ = ciudad;
+        ciudad_ = ciudad;
     }
 
     public void setEmail(String email) {
-        this.email_ = email;
+        email_ = email;
     }
 
     public void setTelefono(String telefono) {
-        this.telefono_ = telefono;
+        telefono_ = telefono;
     }
 
     public void setCodigoPostal(String codigoPostal) {
-        this.codigoPostal_ = codigoPostal;
+        codigoPostal_ = codigoPostal;
     }
 
     public void setPais(String pais) {
-        this.pais_ = pais;
+        pais_ = pais;
     }
 
     public void setEstatus(String estatus) {
-        this.estatus_ = estatus;
+        estatus_ = estatus;
     }
 
     public void setTextoABuscar(String textoABuscar) {
         this.textoABuscar_ = textoABuscar;
     }
+
 }

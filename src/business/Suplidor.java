@@ -33,8 +33,17 @@ public class Suplidor {
         return new data.Suplidor().buscar(suplidor);
     }
 
+    public static ObservableList<data.Suplidor> buscarActivos(String textoABuscar) {
+        data.Suplidor suplidor = new data.Suplidor(textoABuscar);
+        return new data.Suplidor().buscarActivos(suplidor);
+    }
+
     public static ObservableList<data.Suplidor> mostrar() {
         return new data.Suplidor().mostrar();
+    }
+
+    public static ObservableList<data.Suplidor> mostrarActivos() {
+        return new data.Suplidor().mostrarActivos();
     }
 
 }

@@ -4,10 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -99,9 +100,9 @@ public class Producto {
 
                 boolean esEjecutado = (query.executeUpdate() > 0);
                 if (esEjecutado) {
-                    mensaje = "El registro ha sido eliminado exitosamente.";
+                    mensaje = "El registro ha sido actualizado exitosamente.";
                 } else {
-                    throw new SQLException("El registro no pudo ser eliminado correctamente.");
+                    throw new SQLException("El registro no pudo ser actualizado correctamente.");
                 }
             } catch (SQLException ex) {
                 mensaje = ex.getMessage();
@@ -143,22 +144,6 @@ public class Producto {
 
     }
 
-    private ObservableList<Producto> leer(ResultSet resultSet) throws SQLException {
-        ObservableList<Producto> data = FXCollections.observableArrayList();
-        while (resultSet.next()) {
-            int no = resultSet.getInt("ProductoId");
-            final String nombre = resultSet.getString("ProductoNombre");
-            final String descripcion = resultSet.getString("ProductoDescripcion");
-            final BigDecimal precio = resultSet.getBigDecimal("ProductoPrecio");
-            final int unidadesStock = resultSet.getInt("ProductoUnidadesStock");
-            final String estatus = resultSet.getString("ProductoEstatus");
-            final String codigo = resultSet.getString("ProductoCodigo");
-            Producto obj = new Producto(no, codigo, nombre, descripcion, precio, unidadesStock, estatus);
-            data.add(obj);
-        }
-        return data;
-    }
-
     public ObservableList<Producto> buscar(Producto producto) {
         ObservableList<Producto> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
@@ -182,6 +167,58 @@ public class Producto {
         }
 
         return data;
+    }
+
+    public ObservableList<Producto> mostrarActivos() {
+        ObservableList<Producto> data = FXCollections.observableArrayList();
+        try (Connection conn = Conexion.conectar()) {
+            CallableStatement query = conn.prepareCall("{call Producto_MostrarActivos}");
+            data = leer(query.executeQuery());
+        } catch (SQLException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return data;
+    }
+
+    private ObservableList<Producto> leer(ResultSet resultSet) throws SQLException {
+        ObservableList<Producto> data = FXCollections.observableArrayList();
+        while (resultSet.next()) {
+            Producto producto = crear(resultSet);
+            try {
+                final String estatus = resultSet.getString("Estatus");
+                producto.setEstatus(estatus);
+            } catch (SQLException e) {
+            }
+
+            data.add(producto);
+        }
+        return data;
+    }
+
+    private Producto crear(ResultSet resultSet) throws SQLException {
+        int no = resultSet.getInt("Id");
+        final String nombre = resultSet.getString("Nombre");
+        final String descripcion = resultSet.getString("Descripcion");
+        final BigDecimal precio = resultSet.getBigDecimal("Precio");
+        final int unidadesStock = resultSet.getInt("Unidades_Stock");
+        final String codigo = resultSet.getString("Codigo");
+        Producto producto = new Producto(codigo, nombre, descripcion, precio, unidadesStock);
+        producto.setId(no);
+        return producto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Producto)) return false;
+        Producto producto = (Producto) o;
+        return Objects.equals(codigo_, producto.codigo_);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(codigo_);
     }
 
     public int getId() {

@@ -1,29 +1,31 @@
 package view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
-import javafx.stage.Modality;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController implements Initializable {
+    @FXML
+    private TreeView<String> treeView;
 
-    public void mostrarSuplidor(ActionEvent event){
+    private Image icon = new Image(getClass().getResourceAsStream("resources/main.png"));
+
+
+    public void mostrarSuplidor() {
         try {
             Stage primaryStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("Suplidor.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("suplidor/Suplidor.fxml"));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Suplidores");
@@ -33,14 +35,14 @@ public class MainController {
         }
     }
 
-    public void mostrarOrden(ActionEvent event){
+    public void mostrarOrden() {
 
     }
 
-    public void mostrarProducto(ActionEvent event){
+    public void mostrarProducto() {
         try {
             Stage primaryStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("Producto.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("producto/Producto.fxml"));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Productos");
@@ -51,4 +53,40 @@ public class MainController {
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        TreeItem<String> root = new TreeItem<>("Compras", new ImageView(icon));
+
+        TreeItem<String> rootSuplidor = new TreeItem<>("Suplidor");
+        TreeItem<String> nodoSuplidores = new TreeItem<>("Ver suplidores");
+        rootSuplidor.getChildren().add(nodoSuplidores);
+
+        TreeItem<String> rootProducto = new TreeItem<>("Producto");
+        TreeItem<String> nodoProductos = new TreeItem<>("Ver productos");
+        rootProducto.getChildren().add(nodoProductos);
+
+        TreeItem<String> rootOrden = new TreeItem<>("Orden");
+        TreeItem<String> nodoOrdenes = new TreeItem<>("Ver ordenes");
+        TreeItem<String> nodoCompras = new TreeItem<>("Efectuar una compra");
+        rootOrden.getChildren().add(nodoOrdenes);
+        rootOrden.getChildren().add(nodoCompras);
+
+        root.getChildren().addAll(rootSuplidor, rootProducto, rootOrden);
+
+        root.setExpanded(false);
+        treeView.setRoot(root);
+    }
+
+    public void cargarFormulario() {
+        TreeItem<String> item = treeView.getSelectionModel().getSelectedItem();
+        switch (item.getValue()) {
+            case "Ver Suplidores":
+                break;
+            case "Ver Productos":
+                break;
+            default:
+                System.out.println("Default");
+                break;
+        }
+    }
 }

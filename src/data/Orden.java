@@ -4,17 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.math.BigDecimal;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.JDBCType;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class Orden {
 
@@ -29,8 +24,6 @@ public class Orden {
     private BigDecimal totalCargo_;
     private BigDecimal totalNeto_;
     private String estatus_;
-    private ObservableList<OrdenDetalle> detalles_ = FXCollections.observableArrayList();
-
 
     // Para realizar consultas a la base de datos.
     public Orden() {
@@ -38,8 +31,7 @@ public class Orden {
     }
 
     // Para insertar
-    public Orden(int numero, Suplidor suplidor) {
-        setNumero(numero);
+    public Orden(Suplidor suplidor) {
         suplidor_ = suplidor;
     }
 
@@ -66,20 +58,16 @@ public class Orden {
         setId(id);
     }
 
-    private void insertarDetalles(Connection conn, Orden orden, ObservableList<Producto> productos, HashMap<Producto, Integer> cantidad) throws SQLException {
+    private void insertarDetalles(Connection conn, Orden orden, ObservableList<OrdenDetalle> detalles) throws SQLException {
 
-        for (Producto producto : productos) {
-            detalles_.add(new OrdenDetalle(orden.getId(), producto, cantidad.get(producto)));
-        }
 
-        for(OrdenDetalle detalle : detalles_){
+        for (OrdenDetalle detalle : detalles) {
             detalle.setIdOrden(orden.getId());
-            AtomicReference<CallableStatement> procedure = new AtomicReference<>(conn.prepareCall("{call OrdenDetalle_Insertar( ?, ?, ?, ?, ?, ?, ?)}"));
+            AtomicReference<CallableStatement> procedure = new AtomicReference<>(conn.prepareCall("{call OrdenDetalle_Insertar( ?, ?, ?, ?, ?, ?)}"));
             procedure.get().setInt("id", detalle.getIdOrden());
             procedure.get().setInt("productoId", detalle.getProductoId());
             procedure.get().setBigDecimal("precio", detalle.getPrecio());
             procedure.get().setInt("cantidad", detalle.getCantidad());
-            procedure.get().setBigDecimal("neto", detalle.getNeto());
             procedure.get().setBigDecimal("impuesto", detalle.getImpuesto());
             procedure.get().setBigDecimal("descuento", detalle.getDescuento());
 
@@ -91,31 +79,22 @@ public class Orden {
     }
 
     // Listo. 
-    public String insertar(Orden orden, ObservableList<Producto> productos, HashMap<Producto, Integer> cantidad) {
+    public String insertar(Orden orden, ObservableList<OrdenDetalle> detalles) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
             try {
                 // Deshabilita auto transaccion.
                 conn.setAutoCommit(false);
-                AtomicReference<CallableStatement> query = new AtomicReference<>(conn.prepareCall("{call Orden_Insertar(?, ?, ?, ?)}"));
+                AtomicReference<CallableStatement> query = new AtomicReference<>(conn.prepareCall("{call Orden_Insertar(?, ?)}"));
                 query.get().registerOutParameter("id", JDBCType.INTEGER);
                 query.get().setInt("suplidorId", orden.getSuplidorId());
-                query.get().setInt("numero", orden.numero_);
-                query.get().setString("estatus", String.valueOf(orden.estatus_));
 
                 boolean esEjecutado = (query.get().executeUpdate() > 0);
                 if (esEjecutado) {
                     orden.setId(query.get().getInt("id"));
-                    insertarDetalles(conn, orden, productos, cantidad);
+                    insertarDetalles(conn, orden, detalles);
                     conn.commit(); // Confirma la transaccion.
                     mensaje = "El registro ha sido agregado exitosamente.";
-/*                    CallableStatement calcula = conn.prepareCall("{call Orden_CalcularTotal(?)}");
-                    calcula.setInt("id", orden.id_);
-                    esEjecutado = (calcula.executeUpdate() > 0);
-                    if (esEjecutado) {
-                        conn.commit(); // Confirma la transaccion.
-                        mensaje = "El registro ha sido agregado exitosamente.";
-                    }*/
 
                 } else {
                     throw new SQLException();
@@ -200,6 +179,7 @@ public class Orden {
     // Listo
     public ObservableList<OrdenDetalle> mostrarDetalles(int numero) {
         // Texto
+        ObservableList<OrdenDetalle> detalles_ = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
             CallableStatement query = conn.prepareCall("{call OrdenDetalle_Mostrar(?)}");
             query.setInt("numero", numero);

@@ -19,7 +19,7 @@ public class OrdenDetalle {
 
     // Para insertar.
 
-    OrdenDetalle(int idOrden, Producto producto, int cantidad) {
+    public OrdenDetalle(int idOrden, Producto producto, int cantidad) {
         idOrden_ = idOrden;
         producto_ = producto;
         setPrecio(producto.getPrecio());

@@ -1,8 +1,7 @@
 package business;
 
+import data.OrdenDetalle;
 import javafx.collections.ObservableList;
-
-import java.util.HashMap;
 
 public class Orden {
 
@@ -11,10 +10,9 @@ public class Orden {
     }
 
     // Terminado.
-    public static String insertar(int numero, data.Suplidor suplidor, ObservableList<data.Producto> productos,
-            HashMap<data.Producto, Integer> cantidad) {
-        data.Orden orden = new data.Orden(numero, suplidor);
-        return new data.Orden().insertar(orden, productos, cantidad);
+    public static String insertar(data.Suplidor suplidor, ObservableList<OrdenDetalle> detalles) {
+        data.Orden orden = new data.Orden(suplidor);
+        return new data.Orden().insertar(orden, detalles);
     }
 
     // Listo.

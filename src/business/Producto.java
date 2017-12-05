@@ -36,4 +36,8 @@ public class Producto {
         return new data.Producto().mostrar();
     }
 
+    public static ObservableList<data.Producto> mostrarActivos() {
+        return new data.Producto().mostrarActivos();
+    }
+
 }
