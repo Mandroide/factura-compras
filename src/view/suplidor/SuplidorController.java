@@ -26,7 +26,7 @@ public class SuplidorController implements Initializable {
 
     public static void start(Stage stage) throws IOException {
         primaryStage = stage;
-        Parent root = FXMLLoader.load(SuplidorController.class.getResource("/view/suplidor/Suplidor.fxml"));
+        Parent root = FXMLLoader.load(SuplidorController.class.getResource("Suplidor.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ver Suplidores");

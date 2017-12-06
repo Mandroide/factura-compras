@@ -30,7 +30,7 @@ public class OrdenDetallesController implements Initializable {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ver Ordenes");
-        primaryStage.show();
+        primaryStage.showAndWait();
     }
 
 

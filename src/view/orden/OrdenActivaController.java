@@ -143,8 +143,8 @@ public class OrdenActivaController implements Initializable {
         for (Producto producto : productos_) {
             OrdenDetalle detalle = new OrdenDetalle(0, producto, cantidades_.get(producto));
             detalle.setLinea(++linea);
-            detalle.setDescuento(new BigDecimal(Math.random() * 300).setScale(2, RoundingMode.CEILING));
-            detalle.setImpuesto(new BigDecimal(0.05 * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
+            detalle.setDescuento(new BigDecimal(Math.random() * 0.3 * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
+            detalle.setImpuesto(new BigDecimal(0.05 * Math.random() * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
             detalle.setNeto(producto.getPrecio().add(detalle.getImpuesto()).subtract(detalle.getDescuento()).setScale(2, RoundingMode.CEILING));
             detalles_.add(detalle);
         }
