@@ -1,0 +1,1 @@
+El gestor usado para la creacion de la base de datos es MYSQL.
