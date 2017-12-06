@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane minHeight="535.0" minWidth="1303.0" prefHeight="535.0" prefWidth="1350.0"
+            xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="view.producto.ProductoController">
+    <children>
+        <HBox layoutX="238.0" layoutY="29.0" prefHeight="35.0" prefWidth="244.0">
+            <children>
+                <Label prefHeight="28.0" prefWidth="64.0" text="Codigo: ">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="codigo" prefHeight="25.0" prefWidth="168.0"/>
+            </children>
+        </HBox>
+        <HBox layoutX="238.0" layoutY="73.0" prefHeight="40.0" prefWidth="234.0">
+            <children>
+                <Label prefHeight="28.0" prefWidth="80.0" text="Nombre: ">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="nombre" onKeyPressed="#buscar" prefHeight="25.0" prefWidth="182.0"/>
+            </children>
+        </HBox>
+        <HBox layoutX="228.0" layoutY="126.0" prefHeight="113.0" prefWidth="355.0">
+            <children>
+                <Label prefHeight="28.0" prefWidth="82.0" text="Descripcion:">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextArea fx:id="descripcion" prefHeight="65.0" prefWidth="244.0"/>
+            </children>
+        </HBox>
+        <HBox layoutX="522.0" layoutY="20.0" prefHeight="35.0" prefWidth="331.0">
+            <children>
+                <Label prefHeight="28.0" prefWidth="139.0" text="Unidades en Stock: ">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="unidadesStock"/>
+            </children>
+        </HBox>
+        <HBox layoutX="607.0" layoutY="56.0" prefHeight="47.0" prefWidth="209.0">
+            <children>
+                <Label prefHeight="28.0" prefWidth="80.0" text="Precio: ">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="precio" prefHeight="25.0" prefWidth="173.0"/>
+            </children>
+        </HBox>
+        <ButtonBar layoutX="624.0" layoutY="119.0" prefHeight="42.0" prefWidth="234.0">
+            <buttons>
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#agregar" prefHeight="42.0"
+                        prefWidth="105.0" text="Agregar">
+                    <graphic>
+                        <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../resources/botonAgregar.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="elimina" mnemonicParsing="false" onAction="#eliminar" prefHeight="40.0" prefWidth="103.0"
+                        text="Eliminar">
+                    <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../resources/botonEliminar.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Seleccione fila a eliminar"/>
+                    </tooltip>
+                </Button>
+            </buttons>
+        </ButtonBar>
+        <TableView fx:id="tableView" layoutX="217.0" layoutY="272.0" prefHeight="200.0" prefWidth="1074.0">
+            <columns>
+                <TableColumn fx:id="columnaNo" prefWidth="59.0" resizable="false" text="No."/>
+                <TableColumn fx:id="columnaCodigo" minWidth="144.0" prefWidth="174.0" resizable="false" text="Codigo"/>
+                <TableColumn fx:id="columnaNombre" prefWidth="219.0" resizable="false" text="Nombre"/>
+                <TableColumn fx:id="columnaDescripcion" prefWidth="317.0" resizable="false" text="Descripcion"/>
+                <TableColumn fx:id="columnaUnidadesStock" prefWidth="127.0" resizable="false"
+                             text="Cantidades en Stock"/>
+                <TableColumn fx:id="columnaPrecio" prefWidth="102.0" resizable="false" text="Precio"/>
+                <TableColumn fx:id="columnaEstatus" prefWidth="74.0" resizable="false" text="Estatus"/>
+            </columns>
+        </TableView>
+        <ImageView fitHeight="196.0" fitWidth="246.0" layoutX="995.0" layoutY="59.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../resources/productosTabla.png"/>
+            </image>
+        </ImageView>
+        <Button fx:id="botonActualizar" disable="true" layoutX="695.0" layoutY="194.0" mnemonicParsing="false"
+                onAction="#actualizar" prefHeight="42.0" prefWidth="105.0" text="Actualizar">
+            <graphic>
+                <ImageView fitHeight="31.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/botonActualizar.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <TreeView fx:id="treeView" prefHeight="252.0" prefWidth="190.0" showRoot="false"/>
+    </children>
+</AnchorPane>
