@@ -89,14 +89,14 @@ public class OrdenController implements Initializable {
     private TextField numero;
     @FXML
     private Button botonVerDetalles;
-    private Orden orden;
+    private Orden orden = new Orden();
 
     @FXML
     private void verDetalles() throws IOException {
         // Cargame un stage con los detalles, envia suplidor No y SuplidorNombre
         Stage primaryStage = new Stage();
         OrdenDetallesController.start(primaryStage, orden);
-
+        tableView.setItems(business.Orden.mostrar());
     }
 
 

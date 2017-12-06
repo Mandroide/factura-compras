@@ -1,9 +1,6 @@
 package view;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,7 +18,6 @@ import static javafx.application.Platform.exit;
 
 public class Main extends Application {
 
-    private Stage window;
 
     public static void main(String[] args) {
         launch(args);
@@ -29,18 +25,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        window = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("suplidor/Suplidor.fxml"));
-        Scene scene = new Scene(root);
-        window.setScene(scene);
-        window.setTitle("Sistema de compras");
-        boolean b = window.getIcons().add(new Image("view/resources/main.png"));
-        window.setOnCloseRequest((WindowEvent e) ->
+        boolean b = primaryStage.getIcons().add(new Image("view/resources/main.png"));
+        primaryStage.setOnCloseRequest((WindowEvent e) ->
                 exit()
         );
-        SuplidorController.start(window);
-        window.show();
-
+        SuplidorController.start(primaryStage);
+        primaryStage.show();
     }
 
     public static TreeItem<String> iniciarItems() {
