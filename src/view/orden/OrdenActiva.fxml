@@ -5,113 +5,87 @@
 <?import javafx.scene.text.*?>
 <AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.orden.OrdenActivaController">
-    <children>
-        <TableView fx:id="tableView" layoutX="321.0" layoutY="181.0" prefHeight="184.0" prefWidth="858.0">
-            <columns>
-                <TableColumn fx:id="columnaNo" prefWidth="49.0" text="No."/>
-                <TableColumn fx:id="columnaCodigo" prefWidth="98.0" text="Codigo"/>
-                <TableColumn fx:id="columnaNombre" prefWidth="103.0" text="Nombre"/>
-                <TableColumn fx:id="columnaDescripcion" prefWidth="140.0" text="Descripcion"/>
-                <TableColumn fx:id="columnaCantidad" prefWidth="61.0" text="Cantidad"/>
-                <TableColumn fx:id="columnaPrecio" prefWidth="104.0" text="Precio"/>
-                <TableColumn fx:id="columnaDescuento" prefWidth="105.0" text="Descuento"/>
-                <TableColumn fx:id="columnaImpuesto" minWidth="0.0" prefWidth="95.0" text="Impuesto"/>
-                <TableColumn fx:id="columnaNeto" prefWidth="87.0" text="Neto"/>
-            </columns>
-        </TableView>
-        <TitledPane animated="false" collapsible="false" layoutX="362.0" layoutY="12.0" prefHeight="139.0"
-                    prefWidth="307.0" text="Suplidor">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="356.0">
-                    <children>
-                        <HBox layoutX="39.0" layoutY="11.0" prefHeight="33.0" prefWidth="188.0">
-                            <children>
-                                <Label text="No. : "/>
-                                <Label fx:id="id" text="Label"/>
-                            </children>
-                        </HBox>
-                        <HBox layoutX="27.0" layoutY="40.0" prefHeight="33.0" prefWidth="200.0">
-                            <children>
-                                <Label prefHeight="17.0" prefWidth="60.0" text="Nombre: "/>
-                                <Label fx:id="nombre" text="Label"/>
-                            </children>
-                        </HBox>
-                    </children>
-                </AnchorPane>
-            </content>
-        </TitledPane>
-        <VBox layoutX="716.0" layoutY="375.0" prefHeight="191.0" prefWidth="292.0">
-            <children>
-                <HBox prefHeight="33.0" prefWidth="196.0">
-                    <children>
-                        <Label prefHeight="33.0" prefWidth="112.0" text="Total Bruto:      RD$">
-                            <font>
-                                <Font name="System Bold" size="12.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="totalBruto" prefHeight="34.0" prefWidth="58.0" text="10,000.00"/>
-                    </children>
-                </HBox>
-                <HBox prefHeight="33.0" prefWidth="518.0">
-                    <children>
-                        <Label prefHeight="37.0" prefWidth="162.0" text="Total de Descuento:    RD$">
-                            <font>
-                                <Font name="System Bold" size="12.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="totalDescuento" prefHeight="33.0" prefWidth="67.0" text="300.00"/>
-                    </children>
-                </HBox>
-                <HBox prefHeight="35.0" prefWidth="518.0">
-                    <children>
-                        <Label prefHeight="36.0" prefWidth="162.0" text="Total de Impuesto:      RD$">
-                            <font>
-                                <Font name="System Bold" size="12.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="totalImpuesto" prefHeight="40.0" prefWidth="64.0" text="Impuesto"/>
-                    </children>
-                </HBox>
-                <HBox prefHeight="33.0" prefWidth="518.0">
-                    <children>
-                        <Label prefHeight="32.0" prefWidth="162.0" text="Total de Cargo:      RD$">
-                            <font>
-                                <Font name="System Bold" size="12.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="totalCargo" prefHeight="34.0" prefWidth="70.0" text="Cargo"/>
-                    </children>
-                </HBox>
-                <HBox prefHeight="37.0" prefWidth="550.0">
-                    <children>
-                        <Label prefHeight="38.0" prefWidth="162.0" text="Total Neto:      RD$">
-                            <font>
-                                <Font name="System Bold" size="12.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="totalNeto" prefHeight="37.0" prefWidth="63.0" text="Neto" underline="true"/>
-                    </children>
-                </HBox>
-            </children>
-        </VBox>
-        <HBox layoutX="788.0" layoutY="12.0" prefHeight="46.0" prefWidth="220.0">
-            <children>
-                <Label prefHeight="46.0" prefWidth="48.0" text="Fecha: "/>
-                <Label fx:id="fecha" prefHeight="46.0" prefWidth="74.0" text="12/2/2017"/>
-            </children>
+    <TableView fx:id="tableView" layoutX="321.0" layoutY="181.0" prefHeight="184.0" prefWidth="858.0">
+        <columns>
+            <TableColumn fx:id="columnaNo" prefWidth="49.0" text="No."/>
+            <TableColumn fx:id="columnaCodigo" prefWidth="98.0" text="Codigo"/>
+            <TableColumn fx:id="columnaNombre" prefWidth="103.0" text="Nombre"/>
+            <TableColumn fx:id="columnaDescripcion" prefWidth="140.0" sortable="false" text="Descripcion"/>
+            <TableColumn fx:id="columnaCantidad" prefWidth="61.0" text="Cantidad"/>
+            <TableColumn fx:id="columnaPrecio" prefWidth="104.0" text="Precio"/>
+            <TableColumn fx:id="columnaDescuento" prefWidth="105.0" text="Descuento"/>
+            <TableColumn fx:id="columnaImpuesto" minWidth="0.0" prefWidth="95.0" text="Impuesto"/>
+            <TableColumn fx:id="columnaNeto" prefWidth="87.0" text="Neto"/>
+        </columns>
+    </TableView>
+    <TitledPane animated="false" collapsible="false" layoutX="362.0" layoutY="12.0" prefHeight="139.0"
+                prefWidth="307.0" text="Suplidor">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="356.0">
+            <HBox layoutX="39.0" layoutY="11.0" prefHeight="33.0" prefWidth="188.0">
+                <Label text="No. : "/>
+                <Label fx:id="id" text="Label"/>
+            </HBox>
+            <HBox layoutX="27.0" layoutY="40.0" prefHeight="33.0" prefWidth="200.0">
+                <Label prefHeight="17.0" prefWidth="60.0" text="Nombre: "/>
+                <Label fx:id="nombre" text="Label"/>
+            </HBox>
+        </AnchorPane>
+    </TitledPane>
+    <VBox layoutX="716.0" layoutY="375.0" prefHeight="191.0" prefWidth="292.0">
+        <HBox prefHeight="33.0" prefWidth="196.0">
+            <Label prefHeight="33.0" prefWidth="112.0" text="Total Bruto:      RD$">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="totalBruto" prefHeight="34.0" prefWidth="58.0" text="10,000.00"/>
         </HBox>
-        <HBox layoutX="788.0" layoutY="66.0" prefHeight="46.0" prefWidth="220.0">
-            <children>
-                <Label prefHeight="46.0" prefWidth="48.0" text="Hora: "/>
-                <Label fx:id="hora" prefHeight="46.0" prefWidth="74.0" text="4:00 p.m."/>
-            </children>
+        <HBox prefHeight="33.0" prefWidth="518.0">
+            <Label prefHeight="37.0" prefWidth="162.0" text="Total de Descuento:    RD$">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="totalDescuento" prefHeight="33.0" prefWidth="67.0" text="300.00"/>
         </HBox>
-        <ButtonBar layoutX="994.0" layoutY="491.0" prefHeight="40.0" prefWidth="200.0">
-            <buttons>
-                <Button mnemonicParsing="false" onAction="#cancelar" text="Cancelar"/>
-                <Button mnemonicParsing="false" onAction="#confirmar" text="Confirmar"/>
-            </buttons>
-        </ButtonBar>
-        <TreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="252.0" prefWidth="190.0" showRoot="false"/>
-    </children>
+        <HBox prefHeight="35.0" prefWidth="518.0">
+            <Label prefHeight="36.0" prefWidth="162.0" text="Total de Impuesto:      RD$">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="totalImpuesto" prefHeight="40.0" prefWidth="64.0" text="Impuesto"/>
+        </HBox>
+        <HBox prefHeight="33.0" prefWidth="518.0">
+            <Label prefHeight="32.0" prefWidth="162.0" text="Total de Cargo:      RD$">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="totalCargo" prefHeight="34.0" prefWidth="70.0" text="Cargo"/>
+        </HBox>
+        <HBox prefHeight="37.0" prefWidth="550.0">
+            <Label prefHeight="38.0" prefWidth="162.0" text="Total Neto:      RD$">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="totalNeto" prefHeight="37.0" prefWidth="63.0" text="Neto" underline="true"/>
+        </HBox>
+    </VBox>
+    <HBox layoutX="788.0" layoutY="12.0" prefHeight="46.0" prefWidth="220.0">
+        <Label prefHeight="46.0" prefWidth="48.0" text="Fecha: "/>
+        <Label fx:id="fecha" prefHeight="46.0" prefWidth="74.0" text="12/2/2017"/>
+    </HBox>
+    <HBox layoutX="788.0" layoutY="66.0" prefHeight="46.0" prefWidth="220.0">
+        <Label prefHeight="46.0" prefWidth="48.0" text="Hora: "/>
+        <Label fx:id="hora" prefHeight="46.0" prefWidth="74.0" text="4:00 p.m."/>
+    </HBox>
+    <ButtonBar layoutX="994.0" layoutY="491.0" prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+            <Button mnemonicParsing="false" onAction="#cancelar" text="Cancelar"/>
+            <Button mnemonicParsing="false" onAction="#confirmar" text="Confirmar"/>
+        </buttons>
+    </ButtonBar>
+    <TreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="252.0" prefWidth="190.0" showRoot="false"/>
 </AnchorPane>
