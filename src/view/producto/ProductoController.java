@@ -1,5 +1,6 @@
 package view.producto;
 
+import data.Estatus;
 import data.Producto;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,10 +13,12 @@ import javafx.stage.Stage;
 import javafx.util.converter.BigDecimalStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import view.Main;
+import view.RadioButtonCell;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.EnumSet;
 import java.util.ResourceBundle;
 
 import static javafx.fxml.FXMLLoader.load;
@@ -47,7 +50,7 @@ public class ProductoController implements Initializable {
     @FXML
     private TableColumn<Producto, String> columnaCodigo;
     @FXML
-    private TableColumn<Producto, String> columnaEstatus;
+    private TableColumn<Producto, Estatus> columnaEstatus;
 
     private void initTabla() {
         columnaNo.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -68,7 +71,7 @@ public class ProductoController implements Initializable {
                 new BigDecimalStringConverter()
         ));
 
-        columnaEstatus.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaEstatus.setCellFactory((param) -> new RadioButtonCell<>(EnumSet.allOf(Estatus.class)));
     }
 
     @FXML
@@ -93,6 +96,9 @@ public class ProductoController implements Initializable {
         treeView.setRoot(Main.iniciarItems());
         treeView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) ->
                 Main.cambiarScene(primaryStage, newValue));
+        tableView.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) ->
+                producto = newValue
+        );
     }
 
     @FXML
@@ -143,6 +149,7 @@ public class ProductoController implements Initializable {
             String context = business.Producto.eliminar(producto.getId());
             Alert insercion = new Alert(Alert.AlertType.INFORMATION, context);
             insercion.show();
+            initTabla();
             tableView.setItems(business.Producto.mostrar());
         }
 
@@ -167,8 +174,8 @@ public class ProductoController implements Initializable {
             producto.setDescripcion(value);
         } else if(col.equals(columnaPrecio)){
             producto.setPrecio(new BigDecimal(value));
-        } else{
-            producto.setEstatus("A");
+        } else if (col.equals(columnaEstatus)){
+            producto.setEstatus(Estatus.valueOf(newValue.getNewValue().toString().toUpperCase()));
         }
 
         String context = business.Producto.actualizar(producto.getId(), producto.getCodigo(),

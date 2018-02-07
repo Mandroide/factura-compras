@@ -8,6 +8,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,7 @@ public class Producto {
     private BigDecimal precio_;
     private int unidadesStock_;
     private String codigo_;
-    private String estatus_;
+    private Estatus estatus_;
 
     private String textoABuscar_;
 
@@ -31,7 +32,7 @@ public class Producto {
 
     // Para actualizar.
     public Producto(int id, String codigo, String nombre, String descripcion,
-                    BigDecimal precio, int unidadesStock, String estatus) {
+                    BigDecimal precio, int unidadesStock, Estatus estatus) {
         this(codigo, nombre, descripcion, precio, unidadesStock);
         setEstatus(estatus);
         setId(id);
@@ -96,7 +97,7 @@ public class Producto {
                 query.setString("descripcion", producto.descripcion_);
                 query.setBigDecimal("precio", producto.precio_);
                 query.setInt("unidadesStock", producto.unidadesStock_);
-                query.setString("estatus", String.valueOf(producto.estatus_));
+                query.setString("estatus", producto.getEstatus().getChar());
 
                 boolean esEjecutado = (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -185,8 +186,11 @@ public class Producto {
         while (resultSet.next()) {
             Producto producto = crear(resultSet);
             try {
+                HashMap<String, Estatus> opciones = new HashMap<>();
+                opciones.put("A", Estatus.ACTIVO);
+                opciones.put("I", Estatus.INACTIVO);
                 final String estatus = resultSet.getString("Estatus");
-                producto.setEstatus(estatus);
+                producto.setEstatus(opciones.get(estatus));
             } catch (SQLException e) {
             }
 
@@ -245,7 +249,7 @@ public class Producto {
         return codigo_;
     }
 
-    public String getEstatus() {
+    public Estatus getEstatus() {
         return estatus_;
     }
 
@@ -265,7 +269,7 @@ public class Producto {
         precio_ = precio;
     }
 
-    public void setUnidadesStock(int unidadesStock) {
+    private void setUnidadesStock(int unidadesStock) {
         unidadesStock_ = unidadesStock;
     }
 
@@ -273,11 +277,11 @@ public class Producto {
         codigo_ = codigo;
     }
 
-    public void setEstatus(String estatus) {
+    public void setEstatus(Estatus estatus) {
         estatus_ = estatus;
     }
 
-    public void setTextoABuscar(String textoABuscar) {
+    private void setTextoABuscar(String textoABuscar) {
         textoABuscar_ = textoABuscar;
     }
 }
