@@ -11,7 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import view.Main;
 import view.producto.ProductoActivoController;
 
@@ -79,7 +81,7 @@ public class OrdenActivaController implements Initializable {
     @FXML
     private TableColumn<?, ?> columnaDescripcion;
     @FXML
-    private TableColumn<?, ?> columnaCantidad;
+    private TableColumn<?, Integer> columnaCantidad;
     @FXML
     private TableColumn<?, ?> columnaPrecio;
     @FXML
@@ -99,6 +101,8 @@ public class OrdenActivaController implements Initializable {
         columnaDescuento.setCellValueFactory(new PropertyValueFactory<>("descuento"));
         columnaImpuesto.setCellValueFactory(new PropertyValueFactory<>("impuesto"));
         columnaNeto.setCellValueFactory(new PropertyValueFactory<>("neto"));
+
+        columnaCantidad.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
     }
 
     @FXML
@@ -148,6 +152,18 @@ public class OrdenActivaController implements Initializable {
             detalle.setNeto(producto.getPrecio().add(detalle.getImpuesto()).subtract(detalle.getDescuento()).setScale(2, RoundingMode.CEILING));
             detalles_.add(detalle);
         }
+    }
+
+    @FXML
+    private void cambiarCantidad(TableColumn.CellEditEvent newValue){
+        OrdenDetalle detalle = tableView.getSelectionModel().getSelectedItem();
+
+        if (detalle == null || newValue == null)
+            return;
+        if (newValue.getNewValue().equals(newValue.getOldValue()))
+            return;
+
+        detalle.setCantidad((int)newValue.getNewValue());
     }
 
     @FXML
