@@ -85,5 +85,5 @@
             <Button mnemonicParsing="false" onAction="#confirmar" text="Confirmar" />
         </buttons>
     </ButtonBar>
-    <TreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="252.0" prefWidth="190.0" showRoot="false" />
+   <TreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
 </AnchorPane>

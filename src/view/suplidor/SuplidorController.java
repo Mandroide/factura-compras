@@ -1,5 +1,6 @@
 package view.suplidor;
 
+import data.Estatus;
 import data.Suplidor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,10 +14,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import view.Main;
+import view.RadioButtonCell;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -67,10 +70,7 @@ public class SuplidorController implements Initializable {
     @FXML
     private TableColumn<data.Suplidor, String> columnaCodigoPostal;
     @FXML
-    private TableColumn<data.Suplidor, String> columnaEstatus;
-
-    @FXML
-    private ToggleGroup estatus = new ToggleGroup();
+    private TableColumn<data.Suplidor, Estatus> columnaEstatus;
 
     @FXML
     private TreeView<String> treeView;
@@ -94,7 +94,7 @@ public class SuplidorController implements Initializable {
         columnaPais.setCellFactory(TextFieldTableCell.forTableColumn());
         columnaCiudad.setCellFactory(TextFieldTableCell.forTableColumn());
         columnaCodigoPostal.setCellFactory(TextFieldTableCell.forTableColumn());
-        columnaEstatus.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaEstatus.setCellFactory((param) -> new RadioButtonCell<>(EnumSet.allOf(Estatus.class)));
     }
 
 
@@ -102,6 +102,9 @@ public class SuplidorController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initTabla();
         tableView.setItems(business.Suplidor.mostrar());
+        tableView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) ->
+                suplidor = newValue
+        );
 
         llenarPaises();
         treeView.setRoot(Main.iniciarItems());
@@ -190,18 +193,27 @@ public class SuplidorController implements Initializable {
 
     @FXML
     private void actualizar(TableColumn.CellEditEvent newValue) {
-        data.Suplidor suplidor = tableView.getSelectionModel().getSelectedItem();
-        if (suplidor == null || newValue == null)
+        data.Suplidor suplidor = (Suplidor) newValue.getTableView().getItems().get(
+                newValue.getTablePosition().getRow()
+        );
+        if (suplidor == null)
             return;
         if (newValue.getNewValue().equals(newValue.getOldValue()))
             return;
 
         TableColumn col = newValue.getTableColumn();
         String value = newValue.getNewValue().toString();
+
         if (col.equals(columnaNombre)){
             suplidor.setNombre(value);
         } else if(col.equals(columnaEmail)){
-            suplidor.setEmail(value);
+            if (value.toLowerCase().equals(newValue.getOldValue())) {
+                suplidor.setEmail(newValue.getOldValue().toString());
+                initTabla();
+                return;
+            } else{
+                suplidor.setEmail(value.toLowerCase());
+            }
         } else if (col.equals(columnaTelefono)){
             suplidor.setTelefono(value);
         } else if (col.equals(columnaDireccion)){
@@ -213,7 +225,7 @@ public class SuplidorController implements Initializable {
         } else if (col.equals(columnaPais)){
             suplidor.setPais(value);
         } else {
-            suplidor.setEstatus("A");
+            suplidor.setEstatus(Estatus.valueOf(newValue.getNewValue().toString().toUpperCase()));
         }
 
         String context = business.Suplidor.actualizar(

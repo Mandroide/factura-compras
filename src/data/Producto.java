@@ -184,17 +184,7 @@ public class Producto {
     private ObservableList<Producto> leer(ResultSet resultSet) throws SQLException {
         ObservableList<Producto> data = FXCollections.observableArrayList();
         while (resultSet.next()) {
-            Producto producto = crear(resultSet);
-            try {
-                HashMap<String, Estatus> opciones = new HashMap<>();
-                opciones.put("A", Estatus.ACTIVO);
-                opciones.put("I", Estatus.INACTIVO);
-                final String estatus = resultSet.getString("Estatus");
-                producto.setEstatus(opciones.get(estatus));
-            } catch (SQLException e) {
-            }
-
-            data.add(producto);
+            data.add(crear(resultSet));
         }
         return data;
     }
@@ -208,6 +198,14 @@ public class Producto {
         final String codigo = resultSet.getString("Codigo");
         Producto producto = new Producto(codigo, nombre, descripcion, precio, unidadesStock);
         producto.setId(no);
+
+        // Set Estatus.
+        HashMap<String, Estatus> opciones = new HashMap<>();
+        opciones.put("A", Estatus.ACTIVO);
+        opciones.put("I", Estatus.INACTIVO);
+        final Estatus estatus = opciones.get(resultSet.getString("Estatus"));
+        producto.setEstatus(estatus);
+
         return producto;
     }
 

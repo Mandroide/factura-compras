@@ -1,5 +1,6 @@
 package business;
 
+import data.Estatus;
 import javafx.collections.ObservableList;
 
 public class Suplidor {
@@ -17,7 +18,7 @@ public class Suplidor {
     }
 
     public static String actualizar(int id, String nombre, String direccion, String ciudad, String email,
-            String telefono, String codigoPostal, String pais, String estatus) {
+            String telefono, String codigoPostal, String pais, Estatus estatus) {
         data.Suplidor suplidor = new data.Suplidor(id, nombre, direccion, ciudad, email,
             telefono, codigoPostal, pais, estatus);
         return new data.Suplidor().actualizar(suplidor);

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorController">
+<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorController">
     <HBox layoutX="251.0" layoutY="17.0" prefHeight="41.0" prefWidth="291.0">
         <Label prefHeight="25.0" prefWidth="55.0" text="Nombre:  " />
         <TextField fx:id="nombre" onKeyTyped="#buscar" prefHeight="25.0" prefWidth="209.0" />
@@ -32,7 +32,7 @@
         <Label prefHeight="17.0" prefWidth="94.0" text="Codigo Postal: " />
         <TextField fx:id="codigoPostal" prefHeight="25.0" prefWidth="124.0" />
     </HBox>
-    <TableView fx:id="tableView" editable="true" layoutX="219.0" layoutY="204.0" prefHeight="303.0" prefWidth="1133.0">
+    <TableView fx:id="tableView" editable="true" layoutX="148.0" layoutY="204.0" prefHeight="303.0" prefWidth="1202.0">
         <columns>
             <TableColumn fx:id="columnaNo" editable="false" maxWidth="80.0" minWidth="70.0" prefWidth="75.0" text="No." />
             <TableColumn fx:id="columnaNombre" maxWidth="300.0" minWidth="75.0" onEditCommit="#actualizar" prefWidth="150.0" resizable="false" text="Nombre" />
@@ -42,7 +42,7 @@
             <TableColumn fx:id="columnaCodigoPostal" onEditCommit="#actualizar" prefWidth="108.33331298828125" resizable="false" text="Codigo Postal" />
             <TableColumn fx:id="columnaCiudad" maxWidth="1.7976931348623157E308" minWidth="100.0" onEditCommit="#actualizar" prefWidth="86.0" resizable="false" text="Ciudad" />
             <TableColumn fx:id="columnaPais" minWidth="125.0" onEditCommit="#actualizar" prefWidth="207.6666259765625" resizable="false" text="Pais" />
-            <TableColumn fx:id="columnaEstatus" maxWidth="205.33331298828125" minWidth="41.0" onEditCommit="#actualizar" prefWidth="93.3333740234375" resizable="false" text="Estatus" />
+            <TableColumn fx:id="columnaEstatus" maxWidth="205.33331298828125" minWidth="41.0" onEditCommit="#actualizar" prefWidth="157.0" resizable="false" text="Estatus" />
         </columns>
     </TableView>
     <ImageView fitHeight="170.0" fitWidth="178.0" layoutX="1171.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -50,14 +50,14 @@
     </ImageView>
     <ButtonBar layoutX="861.0" layoutY="60.0" prefHeight="53.0" prefWidth="254.0">
         <buttons>
-            <Button fx:id="agrega" defaultButton="true" mnemonicParsing="false" onAction="#agregar" prefHeight="57.0" prefWidth="115.0" text="Agregar">
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#agregar" prefHeight="57.0" prefWidth="115.0" text="Agregar">
                 <graphic>
                     <ImageView fitHeight="62.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../resources/botonAgregar.png" />
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="elimina" mnemonicParsing="false" onAction="#eliminar" prefHeight="57.0" prefWidth="115.0" text="Eliminar">
+            <Button mnemonicParsing="false" onAction="#eliminar" prefHeight="57.0" prefWidth="115.0" text="Eliminar">
                 <graphic>
                     <ImageView fitHeight="58.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../resources/botonEliminar.png" />
@@ -69,5 +69,5 @@
             </Button>
         </buttons>
     </ButtonBar>
-    <TreeView fx:id="treeView" layoutX="7.0" layoutY="12.0" prefHeight="252.0" prefWidth="190.0" showRoot="false" />
+    <TreeView fx:id="treeView" layoutX="7.0" layoutY="12.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
 </AnchorPane>
