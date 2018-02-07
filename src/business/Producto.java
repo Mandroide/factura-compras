@@ -1,5 +1,6 @@
 package business;
 
+import data.Estatus;
 import javafx.collections.ObservableList;
 
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ public class Producto {
     }
 
     public static String actualizar(int id, String codigo, String nombre, String descripcion, BigDecimal precio,
-                                    int unidadesStock, String estatus) {
+                                    int unidadesStock, Estatus estatus) {
         data.Producto producto = new data.Producto(id, codigo, nombre, descripcion, precio, unidadesStock, estatus);
         return producto.actualizar(producto);
     }
