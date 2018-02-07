@@ -7,13 +7,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.converter.BigDecimalStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import view.Main;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static javafx.fxml.FXMLLoader.load;
@@ -33,19 +35,19 @@ public class ProductoController implements Initializable {
     @FXML
     private TableView<data.Producto> tableView;
     @FXML
-    private TableColumn<?, ?> columnaNo;
+    private TableColumn<Producto, Integer> columnaNo;
     @FXML
-    private TableColumn<?, ?> columnaNombre;
+    private TableColumn<Producto, String> columnaNombre;
     @FXML
-    private TableColumn<?, ?> columnaDescripcion;
+    private TableColumn<Producto, String> columnaDescripcion;
     @FXML
-    private TableColumn<?, ?> columnaPrecio;
+    private TableColumn<Producto, BigDecimal> columnaPrecio;
     @FXML
-    private TableColumn<?, ?> columnaUnidadesStock;
+    private TableColumn<Producto, Integer> columnaUnidadesStock;
     @FXML
-    private TableColumn<?, ?> columnaCodigo;
+    private TableColumn<Producto, String> columnaCodigo;
     @FXML
-    private TableColumn<?, ?> columnaEstatus;
+    private TableColumn<Producto, String> columnaEstatus;
 
     private void initTabla() {
         columnaNo.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -55,6 +57,18 @@ public class ProductoController implements Initializable {
         columnaUnidadesStock.setCellValueFactory(new PropertyValueFactory<>("unidadesStock"));
         columnaCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         columnaEstatus.setCellValueFactory(new PropertyValueFactory<>("estatus"));
+
+        columnaCodigo.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaNombre.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaDescripcion.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaUnidadesStock.setCellFactory(TextFieldTableCell.forTableColumn(
+                new IntegerStringConverter()
+        ));
+        columnaPrecio.setCellFactory(TextFieldTableCell.forTableColumn(
+                new BigDecimalStringConverter()
+        ));
+
+        columnaEstatus.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     @FXML
@@ -70,22 +84,11 @@ public class ProductoController implements Initializable {
     private TextField precio;
     @FXML
     private TextField codigo;
-    @FXML
-    private Button botonActualizar;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initTabla();
         tableView.setItems(business.Producto.mostrar());
-        tableView.getSelectionModel().selectedItemProperty().addListener(
-                (v, oldValue, newValue) -> {
-                    if (newValue == null)
-                        return;
-                    producto = newValue;
-                    botonActualizar.setDisable(false);
-                }
-        );
 
         treeView.setRoot(Main.iniciarItems());
         treeView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) ->
@@ -94,12 +97,11 @@ public class ProductoController implements Initializable {
 
     @FXML
     private void buscar() {
-        botonActualizar.setDisable(true);
         tableView.setItems(business.Producto.buscar(nombre.getText()));
     }
 
 
-    private Optional<ButtonType> confirmar() {
+    private boolean haConfirmado() {
         String mensaje = ("Codigo: " + codigo.getText() + "\n") +
                 "Nombre: " + nombre.getText() + "\n" +
                 "Descripcion: " + descripcion.getText() + "\n" +
@@ -109,14 +111,13 @@ public class ProductoController implements Initializable {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("\"¿Desea continuar?\"");
         alerta.setHeaderText(mensaje);
-        return alerta.showAndWait();
+        return alerta.showAndWait().isPresent();
     }
 
 
     @FXML
     private void agregar() {
-        Optional<ButtonType> resultado = confirmar();
-        if (resultado.isPresent()) {
+        if (haConfirmado()) {
             String context = business.Producto.insertar(codigo.getText(), nombre.getText(), descripcion.getText(),
                     new BigDecimal(precio.getText()), Integer.parseInt(unidadesStock.getText()));
             Alert insercion = new Alert(Alert.AlertType.INFORMATION, context);
@@ -148,24 +149,31 @@ public class ProductoController implements Initializable {
     }
 
     @FXML
-    private void actualizar() {
-        String mensaje = "No.: " + producto.getId() + "\n"
-                + "Codigo: " + codigo.getText() + "\n"
-                + "Nombre: " + nombre.getText() + "\n"
-                + "Descripcion: " + descripcion.getText() + "\n"
-                + "Unidades en Stock: " + unidadesStock.getText() + "\n"
-                + "Precio: " + precio.getText() + "\n";
-        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("¿Desea continuar?");
-        alerta.setHeaderText(mensaje);
-        if (alerta.showAndWait().isPresent()) {
-            String context = business.Producto.actualizar(producto.getId(), codigo.getText(),
-                    nombre.getText(), descripcion.getText(), new BigDecimal(precio.getText()),
-                    Integer.parseInt(unidadesStock.getText()), "A");
-            Alert insercion = new Alert(Alert.AlertType.INFORMATION, context);
-            insercion.show();
-            tableView.setItems(business.Producto.mostrar());
+    private void actualizar(TableColumn.CellEditEvent newValue){
+
+        Producto producto = tableView.getSelectionModel().getSelectedItem();
+        if (producto == null || newValue == null)
+            return;
+        if (newValue.getNewValue().equals(newValue.getOldValue()))
+            return;
+        if(newValue.getTableColumn().equals(columnaNombre)){
+            producto.setNombre(newValue.getNewValue().toString());
+        } else if (newValue.getTableColumn().equals(columnaCodigo)){
+            producto.setCodigo(newValue.getNewValue().toString());
+        } else if (newValue.getTableColumn().equals(columnaDescripcion)){
+            producto.setDescripcion(newValue.getNewValue().toString());
+        } else if(newValue.getTableColumn().equals(columnaPrecio)){
+            producto.setPrecio(new BigDecimal(newValue.getNewValue().toString()));
+        } else{
+            producto.setEstatus("A");
         }
+
+        String context = business.Producto.actualizar(producto.getId(), producto.getCodigo(),
+                producto.getNombre(), producto.getDescripcion(), producto.getPrecio(),
+                producto.getUnidadesStock(), producto.getEstatus());
+        Alert insercion = new Alert(Alert.AlertType.INFORMATION, context);
+        insercion.show();
+        tableView.setItems(business.Producto.mostrar());
 
     }
 

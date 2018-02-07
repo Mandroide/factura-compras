@@ -73,8 +73,6 @@ public class SuplidorController implements Initializable {
     private ToggleGroup estatus = new ToggleGroup();
 
     @FXML
-    private Button botonActualizar;
-    @FXML
     private TreeView<String> treeView;
 
 
@@ -95,14 +93,7 @@ public class SuplidorController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initTabla();
         tableView.setItems(business.Suplidor.mostrar());
-        tableView.getSelectionModel().selectedItemProperty().addListener(
-                (v, oldValue, newValue) -> {
-                    if (newValue == null)
-                        return;
-                    suplidor = newValue;
-                    botonActualizar.setDisable(false);
-                }
-        );
+
         llenarPaises();
         treeView.setRoot(Main.iniciarItems());
         treeView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) ->
@@ -132,7 +123,6 @@ public class SuplidorController implements Initializable {
 
     @FXML
     private void buscar() {
-        botonActualizar.setDisable(true);
         tableView.setItems(business.Suplidor.buscar(nombre.getText()));
     }
 
