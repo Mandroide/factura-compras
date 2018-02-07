@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import view.Main;
 
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SuplidorController implements Initializable {
@@ -51,23 +51,23 @@ public class SuplidorController implements Initializable {
     @FXML
     private TableView<data.Suplidor> tableView;
     @FXML
-    private TableColumn<?, ?> columnaNo;
+    private TableColumn<data.Suplidor, Integer> columnaNo;
     @FXML
-    private TableColumn<?, ?> columnaNombre;
+    private TableColumn<data.Suplidor, String> columnaNombre;
     @FXML
-    private TableColumn<?, ?> columnaEmail;
+    private TableColumn<data.Suplidor, String> columnaEmail;
     @FXML
-    private TableColumn<?, ?> columnaTelefono;
+    private TableColumn<data.Suplidor, String> columnaTelefono;
     @FXML
-    private TableColumn<?, ?> columnaDireccion;
+    private TableColumn<data.Suplidor, String> columnaDireccion;
     @FXML
-    private TableColumn<?, ?> columnaPais;
+    private TableColumn<data.Suplidor, String> columnaPais;
     @FXML
-    private TableColumn<?, ?> columnaCiudad;
+    private TableColumn<data.Suplidor, String> columnaCiudad;
     @FXML
-    private TableColumn<?, ?> columnaCodigoPostal;
+    private TableColumn<data.Suplidor, String> columnaCodigoPostal;
     @FXML
-    private TableColumn<?, ?> columnaEstatus;
+    private TableColumn<data.Suplidor, String> columnaEstatus;
 
     @FXML
     private ToggleGroup estatus = new ToggleGroup();
@@ -86,6 +86,15 @@ public class SuplidorController implements Initializable {
         columnaCiudad.setCellValueFactory(new PropertyValueFactory<>("ciudad"));
         columnaCodigoPostal.setCellValueFactory(new PropertyValueFactory<>("codigoPostal"));
         columnaEstatus.setCellValueFactory(new PropertyValueFactory<>("estatus"));
+
+        columnaNombre.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaEmail.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaTelefono.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaDireccion.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaPais.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaCiudad.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaCodigoPostal.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaEstatus.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
 
@@ -126,7 +135,7 @@ public class SuplidorController implements Initializable {
         tableView.setItems(business.Suplidor.buscar(nombre.getText()));
     }
 
-    private Optional<ButtonType> confirmar() {
+    private boolean haConfirmado() {
         String mensaje = ("Nombre: " + nombre.getText() + "\n") +
                 "Email: " + email.getText() + "\n" +
                 "Telefono: " + telefono.getText() + "\n" +
@@ -138,14 +147,13 @@ public class SuplidorController implements Initializable {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("\"¿Desea continuar?\"");
         alerta.setHeaderText(mensaje);
-        return alerta.showAndWait();
+        return alerta.showAndWait().isPresent();
     }
 
 
     @FXML
     private void agregar() {
-        Optional<ButtonType> resultado = confirmar();
-        if (resultado.isPresent()) {
+        if (haConfirmado()) {
             String context = business.Suplidor.insertar(
                     nombre.getText(), direccion.getText(), ciudad.getText(), email.getText(), telefono.getText(),
                     codigoPostal.getText(), paises.getValue());
@@ -181,25 +189,40 @@ public class SuplidorController implements Initializable {
     }
 
     @FXML
-    private void actualizar() {
-        String mensaje = "No.: " + suplidor.getId() + "\n"
-                + "Nombre: " + nombre.getText() + "\n"
-                + "Email: " + email.getText() + "\n"
-                + "Telefono: " + telefono.getText() + "\n"
-                + "Direccion: " + direccion.getText() + "\n"
-                + "Codigo Postal: " + codigoPostal.getText() + "\n"
-                + "Ciudad: " + ciudad.getText() + "\n"
-                + "Pais: " + paises.getValue() + "\n";
-        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("¿Desea continuar?");
-        alerta.setHeaderText(mensaje);
-        if (alerta.showAndWait().isPresent()) {
-            String context = business.Suplidor.actualizar(suplidor.getId(), nombre.getText(), direccion.getText(),
-                    ciudad.getText(), email.getText(), telefono.getText(), codigoPostal.getText(), paises.getValue(), "A");
-            Alert insercion = new Alert(Alert.AlertType.INFORMATION, context);
-            insercion.show();
-            tableView.setItems(business.Suplidor.mostrar());
+    private void actualizar(TableColumn.CellEditEvent newValue) {
+        data.Suplidor suplidor = tableView.getSelectionModel().getSelectedItem();
+        if (suplidor == null || newValue == null)
+            return;
+        if (newValue.getNewValue().equals(newValue.getOldValue()))
+            return;
+
+        TableColumn col = newValue.getTableColumn();
+        String value = newValue.getNewValue().toString();
+        if (col.equals(columnaNombre)){
+            suplidor.setNombre(value);
+        } else if(col.equals(columnaEmail)){
+            suplidor.setEmail(value);
+        } else if (col.equals(columnaTelefono)){
+            suplidor.setTelefono(value);
+        } else if (col.equals(columnaDireccion)){
+            suplidor.setDireccion(value);
+        } else if (col.equals(columnaCodigoPostal)){
+            suplidor.setCodigoPostal(value);
+        } else if (col.equals(columnaCiudad)){
+            suplidor.setCiudad(value);
+        } else if (col.equals(columnaPais)){
+            suplidor.setPais(value);
+        } else {
+            suplidor.setEstatus("A");
         }
+
+        String context = business.Suplidor.actualizar(
+                suplidor.getId(), suplidor.getNombre(), suplidor.getDireccion(), suplidor.getCiudad(), suplidor.getEmail(),
+                suplidor.getTelefono(), suplidor.getCodigoPostal(), suplidor.getPais(), suplidor.getEstatus()
+        );
+        Alert insercion = new Alert(Alert.AlertType.INFORMATION, context);
+        insercion.show();
+        tableView.setItems(business.Suplidor.mostrar());
 
     }
 }
