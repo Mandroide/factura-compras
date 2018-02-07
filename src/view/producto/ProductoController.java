@@ -156,14 +156,17 @@ public class ProductoController implements Initializable {
             return;
         if (newValue.getNewValue().equals(newValue.getOldValue()))
             return;
-        if(newValue.getTableColumn().equals(columnaNombre)){
-            producto.setNombre(newValue.getNewValue().toString());
-        } else if (newValue.getTableColumn().equals(columnaCodigo)){
-            producto.setCodigo(newValue.getNewValue().toString());
-        } else if (newValue.getTableColumn().equals(columnaDescripcion)){
-            producto.setDescripcion(newValue.getNewValue().toString());
-        } else if(newValue.getTableColumn().equals(columnaPrecio)){
-            producto.setPrecio(new BigDecimal(newValue.getNewValue().toString()));
+
+        TableColumn col = newValue.getTableColumn();
+        String value = newValue.getNewValue().toString();
+        if(col.equals(columnaNombre)){
+            producto.setNombre(value);
+        } else if (col.equals(columnaCodigo)){
+            producto.setCodigo(value);
+        } else if (col.equals(columnaDescripcion)){
+            producto.setDescripcion(value);
+        } else if(col.equals(columnaPrecio)){
+            producto.setPrecio(new BigDecimal(value));
         } else{
             producto.setEstatus("A");
         }

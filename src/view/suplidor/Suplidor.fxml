@@ -3,82 +3,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorController">
+<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorController">
     <HBox layoutX="251.0" layoutY="17.0" prefHeight="41.0" prefWidth="291.0">
-        <Label prefHeight="25.0" prefWidth="55.0" text="Nombre:  "/>
-        <TextField fx:id="nombre" onKeyTyped="#buscar" prefHeight="25.0" prefWidth="209.0"/>
+        <Label prefHeight="25.0" prefWidth="55.0" text="Nombre:  " />
+        <TextField fx:id="nombre" onKeyTyped="#buscar" prefHeight="25.0" prefWidth="209.0" />
     </HBox>
     <HBox layoutX="265.0" layoutY="63.0" prefHeight="35.0" prefWidth="260.0">
-        <Label prefHeight="25.0" prefWidth="87.0" text="Email: "/>
-        <TextField fx:id="email" prefHeight="25.0" prefWidth="244.0"/>
+        <Label prefHeight="25.0" prefWidth="87.0" text="Email: " />
+        <TextField fx:id="email" prefHeight="25.0" prefWidth="244.0" />
     </HBox>
     <HBox layoutX="250.0" layoutY="109.0" prefHeight="35.0" prefWidth="249.0">
-        <Label prefHeight="17.0" prefWidth="61.0" text="Telefono: "/>
-        <TextField fx:id="telefono"/>
+        <Label prefHeight="17.0" prefWidth="61.0" text="Telefono: " />
+        <TextField fx:id="telefono" />
     </HBox>
     <HBox layoutX="250.0" layoutY="150.0" prefHeight="41.0" prefWidth="291.0">
-        <Label prefHeight="25.0" prefWidth="78.0" text="Direccion: "/>
-        <TextField fx:id="direccion" prefHeight="25.0" prefWidth="244.0"/>
+        <Label prefHeight="25.0" prefWidth="78.0" text="Direccion: " />
+        <TextField fx:id="direccion" prefHeight="25.0" prefWidth="244.0" />
     </HBox>
     <HBox layoutX="628.0" layoutY="14.0" prefHeight="52.0" prefWidth="209.0">
-        <Label prefHeight="25.0" prefWidth="55.0" text="Pais: "/>
-        <ChoiceBox fx:id="paises" prefWidth="150.0"/>
+        <Label prefHeight="25.0" prefWidth="55.0" text="Pais: " />
+        <ChoiceBox fx:id="paises" prefWidth="150.0" />
     </HBox>
     <HBox layoutX="614.0" layoutY="115.0" prefHeight="40.0" prefWidth="237.0">
-        <Label prefHeight="25.0" prefWidth="57.0" text="Ciudad:"/>
-        <TextField fx:id="ciudad" prefHeight="25.0" prefWidth="170.0"/>
+        <Label prefHeight="25.0" prefWidth="57.0" text="Ciudad:" />
+        <TextField fx:id="ciudad" prefHeight="25.0" prefWidth="170.0" />
     </HBox>
     <HBox layoutX="579.0" layoutY="69.0" prefHeight="25.0" prefWidth="224.0">
-        <Label prefHeight="17.0" prefWidth="94.0" text="Codigo Postal: "/>
-        <TextField fx:id="codigoPostal" prefHeight="25.0" prefWidth="124.0"/>
+        <Label prefHeight="17.0" prefWidth="94.0" text="Codigo Postal: " />
+        <TextField fx:id="codigoPostal" prefHeight="25.0" prefWidth="124.0" />
     </HBox>
     <TableView fx:id="tableView" editable="true" layoutX="219.0" layoutY="204.0" prefHeight="303.0" prefWidth="1133.0">
         <columns>
-            <TableColumn fx:id="columnaNo" editable="false" maxWidth="80.0" minWidth="70.0" prefWidth="75.0"
-                         text="No."/>
-            <TableColumn fx:id="columnaNombre" maxWidth="300.0" minWidth="75.0" prefWidth="150.0" resizable="false"
-                         text="Nombre"/>
-            <TableColumn fx:id="columnaEmail" prefWidth="150.66668701171875" resizable="false" text="Email"/>
-            <TableColumn fx:id="columnaTelefono" prefWidth="123.0" resizable="false" text="Telefono"/>
-            <TableColumn fx:id="columnaDireccion" minWidth="100.0" prefWidth="128.0" resizable="false" sortable="false"
-                         text="Direccion"/>
-            <TableColumn fx:id="columnaCodigoPostal" prefWidth="108.33331298828125" resizable="false"
-                         text="Codigo Postal"/>
-            <TableColumn fx:id="columnaCiudad" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="86.0"
-                         resizable="false" text="Ciudad"/>
-            <TableColumn fx:id="columnaPais" minWidth="125.0" prefWidth="207.6666259765625" resizable="false"
-                         text="Pais"/>
-            <TableColumn fx:id="columnaEstatus" maxWidth="205.33331298828125" minWidth="41.0"
-                         prefWidth="93.3333740234375" resizable="false" text="Estatus"/>
+            <TableColumn fx:id="columnaNo" editable="false" maxWidth="80.0" minWidth="70.0" prefWidth="75.0" text="No." />
+            <TableColumn fx:id="columnaNombre" maxWidth="300.0" minWidth="75.0" onEditCommit="#actualizar" prefWidth="150.0" resizable="false" text="Nombre" />
+            <TableColumn fx:id="columnaEmail" onEditCommit="#actualizar" prefWidth="150.66668701171875" resizable="false" text="Email" />
+            <TableColumn fx:id="columnaTelefono" onEditCommit="#actualizar" prefWidth="123.0" resizable="false" text="Telefono" />
+            <TableColumn fx:id="columnaDireccion" minWidth="100.0" onEditCommit="#actualizar" prefWidth="128.0" resizable="false" sortable="false" text="Direccion" />
+            <TableColumn fx:id="columnaCodigoPostal" onEditCommit="#actualizar" prefWidth="108.33331298828125" resizable="false" text="Codigo Postal" />
+            <TableColumn fx:id="columnaCiudad" maxWidth="1.7976931348623157E308" minWidth="100.0" onEditCommit="#actualizar" prefWidth="86.0" resizable="false" text="Ciudad" />
+            <TableColumn fx:id="columnaPais" minWidth="125.0" onEditCommit="#actualizar" prefWidth="207.6666259765625" resizable="false" text="Pais" />
+            <TableColumn fx:id="columnaEstatus" maxWidth="205.33331298828125" minWidth="41.0" onEditCommit="#actualizar" prefWidth="93.3333740234375" resizable="false" text="Estatus" />
         </columns>
     </TableView>
-    <ImageView fitHeight="170.0" fitWidth="178.0" layoutX="1171.0" layoutY="5.0" pickOnBounds="true"
-               preserveRatio="true">
-        <Image url="@../resources/suplidoresTabla.png"/>
+    <ImageView fitHeight="170.0" fitWidth="178.0" layoutX="1171.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../resources/suplidoresTabla.png" />
     </ImageView>
     <ButtonBar layoutX="861.0" layoutY="60.0" prefHeight="53.0" prefWidth="254.0">
         <buttons>
-            <Button fx:id="agrega" defaultButton="true" mnemonicParsing="false" onAction="#agregar" prefHeight="57.0"
-                    prefWidth="115.0" text="Agregar">
+            <Button fx:id="agrega" defaultButton="true" mnemonicParsing="false" onAction="#agregar" prefHeight="57.0" prefWidth="115.0" text="Agregar">
                 <graphic>
                     <ImageView fitHeight="62.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../resources/botonAgregar.png"/>
+                        <Image url="@../resources/botonAgregar.png" />
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="elimina" mnemonicParsing="false" onAction="#eliminar" prefHeight="57.0" prefWidth="115.0"
-                    text="Eliminar">
+            <Button fx:id="elimina" mnemonicParsing="false" onAction="#eliminar" prefHeight="57.0" prefWidth="115.0" text="Eliminar">
                 <graphic>
                     <ImageView fitHeight="58.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../resources/botonEliminar.png"/>
+                        <Image url="@../resources/botonEliminar.png" />
                     </ImageView>
                 </graphic>
                 <tooltip>
-                    <Tooltip text="Seleccione fila a eliminar"/>
+                    <Tooltip text="Seleccione fila a eliminar" />
                 </tooltip>
             </Button>
         </buttons>
     </ButtonBar>
-    <TreeView fx:id="treeView" layoutX="7.0" layoutY="12.0" prefHeight="252.0" prefWidth="190.0" showRoot="false"/>
+    <TreeView fx:id="treeView" layoutX="7.0" layoutY="12.0" prefHeight="252.0" prefWidth="190.0" showRoot="false" />
 </AnchorPane>
