@@ -7,40 +7,32 @@
 <?import javafx.scene.layout.HBox?>
 <AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.orden.OrdenController">
-    <children>
-        <HBox layoutX="227.0" layoutY="33.0" prefHeight="48.0" prefWidth="237.0">
-            <children>
-                <Label prefHeight="26.0" prefWidth="54.0" text="Orden #:  "/>
-                <TextField fx:id="numero" disable="true" prefHeight="25.0" prefWidth="142.0"/>
-                <ImageView fitHeight="26.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../resources/buscarTexto.png"/>
-                    </image>
-                </ImageView>
-            </children>
-        </HBox>
-        <TableView fx:id="tableView" layoutX="212.0" layoutY="230.0" prefHeight="200.0" prefWidth="1056.0">
-            <columns>
-                <TableColumn fx:id="columnaSuplidorNo" prefWidth="58.00001525878906" text="No."/>
-                <TableColumn fx:id="columnaSuplidorNombre" prefWidth="141.0" text="Nombre"/>
-                <TableColumn fx:id="columnaNo" prefWidth="113.0" text="# Orden"/>
-                <TableColumn fx:id="columnaFecha" prefWidth="91.0" text="Fecha"/>
-                <TableColumn fx:id="columnaHora" prefWidth="92.0" text="Hora"/>
-                <TableColumn fx:id="columnaTotalBruto" prefWidth="115.0" text="Total Bruto"/>
-                <TableColumn fx:id="columnaTotalDescuento" prefWidth="114.0" text="Total Descuento"/>
-                <TableColumn fx:id="columnaTotalImpuesto" prefWidth="108.0" text="Total Impuesto"/>
-                <TableColumn fx:id="columnaTotalCargo" prefWidth="99.0" text="Total Cargo"/>
-                <TableColumn fx:id="columnaTotalNeto" prefWidth="123.0" text="Total Neto"/>
-            </columns>
-        </TableView>
-        <Button fx:id="botonVerDetalles" defaultButton="true" disable="true" layoutX="489.0" layoutY="57.0"
-                mnemonicParsing="false" onAction="#verDetalles" text="Ver detalles"/>
-        <TreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="252.0" prefWidth="190.0" showRoot="false"/>
-        <ImageView fitHeight="193.0" fitWidth="331.0" layoutX="739.0" layoutY="14.0" pickOnBounds="true"
-                   preserveRatio="true">
-            <image>
-                <Image url="@../resources/ordenesTabla.png"/>
-            </image>
+    <HBox layoutX="227.0" layoutY="33.0" prefHeight="48.0" prefWidth="237.0">
+        <Label prefHeight="26.0" prefWidth="54.0" text="Orden #:  "/>
+        <TextField fx:id="numero" disable="true" prefHeight="25.0" prefWidth="142.0"/>
+        <ImageView fitHeight="26.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../resources/buscarTexto.png"/>
         </ImageView>
-    </children>
+    </HBox>
+    <TableView fx:id="tableView" layoutX="212.0" layoutY="230.0" prefHeight="200.0" prefWidth="1056.0">
+        <columns>
+            <TableColumn fx:id="columnaSuplidorNo" prefWidth="58.00001525878906" text="No."/>
+            <TableColumn fx:id="columnaSuplidorNombre" prefWidth="141.0" text="Nombre"/>
+            <TableColumn fx:id="columnaNo" prefWidth="113.0" text="# Orden"/>
+            <TableColumn fx:id="columnaFecha" prefWidth="91.0" text="Fecha"/>
+            <TableColumn fx:id="columnaHora" prefWidth="92.0" text="Hora"/>
+            <TableColumn fx:id="columnaTotalBruto" prefWidth="115.0" text="Total Bruto"/>
+            <TableColumn fx:id="columnaTotalDescuento" prefWidth="114.0" text="Total Descuento"/>
+            <TableColumn fx:id="columnaTotalImpuesto" prefWidth="108.0" text="Total Impuesto"/>
+            <TableColumn fx:id="columnaTotalCargo" prefWidth="99.0" text="Total Cargo"/>
+            <TableColumn fx:id="columnaTotalNeto" prefWidth="123.0" text="Total Neto"/>
+        </columns>
+    </TableView>
+    <Button fx:id="botonVerDetalles" defaultButton="true" disable="true" layoutX="489.0" layoutY="57.0"
+            mnemonicParsing="false" onAction="#verDetalles" text="Ver detalles"/>
+    <ImageView fitHeight="193.0" fitWidth="331.0" layoutX="739.0" layoutY="14.0" pickOnBounds="true"
+               preserveRatio="true">
+        <Image url="@../resources/ordenesTabla.png"/>
+    </ImageView>
+    <TreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="170.0" prefWidth="190.0" showRoot="false"/>
 </AnchorPane>

@@ -7,6 +7,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +21,7 @@ public class Suplidor {
     private String telefono_;
     private String codigoPostal_;
     private String pais_;
-    private String estatus_;
+    private Estatus estatus_;
 
     private String textoABuscar_;
 
@@ -39,7 +40,7 @@ public class Suplidor {
 
     // Para actualizar
     public Suplidor(int id, String nombre, String direccion, String ciudad, String email,
-            String telefono, String codigoPostal, String pais, String estatus) {
+            String telefono, String codigoPostal, String pais, Estatus estatus) {
         this(nombre, direccion, ciudad, email, telefono, codigoPostal, pais); // Constructor de insertar
         setEstatus(estatus);
         setId(id);
@@ -102,7 +103,7 @@ public class Suplidor {
                 query.setString("telefono", suplidor.telefono_);
                 query.setString("codigoPostal", suplidor.codigoPostal_);
                 query.setString("pais", suplidor.pais_);
-                query.setString("estatus", suplidor.estatus_);
+                query.setString("estatus", suplidor.estatus_.getChar());
 
                 boolean esEjecutado = (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -202,13 +203,7 @@ public class Suplidor {
     private ObservableList<Suplidor> leer(ResultSet resultSet) throws SQLException {
         ObservableList<Suplidor> data = FXCollections.observableArrayList();
         while (resultSet.next()) {
-            Suplidor suplidor = crear(resultSet);
-            try {
-                final String estatus = resultSet.getString("Estatus");
-                suplidor.setEstatus(estatus);
-            } catch (SQLException e) {
-            }
-            data.add(suplidor);
+            data.add(crear(resultSet));
         }
         return data;
     }
@@ -224,6 +219,13 @@ public class Suplidor {
         final String codigoPostal = resultSet.getString("Codigo_Postal");
         Suplidor suplidor = new Suplidor(nombre, direccion, ciudad, email, telefono, codigoPostal, pais);
         suplidor.setId(no);
+
+        HashMap<String, Estatus> opciones = new HashMap<>();
+        opciones.put("A", Estatus.ACTIVO);
+        opciones.put("I", Estatus.INACTIVO);
+        final String estatus = resultSet.getString("Estatus");
+        suplidor.setEstatus(opciones.get(estatus));
+
         return suplidor;
     }
 
@@ -259,7 +261,7 @@ public class Suplidor {
         return pais_;
     }
 
-    public String getEstatus() {
+    public Estatus getEstatus() {
         return estatus_;
     }
 
@@ -295,11 +297,11 @@ public class Suplidor {
         pais_ = pais;
     }
 
-    public void setEstatus(String estatus) {
+    public void setEstatus(Estatus estatus) {
         estatus_ = estatus;
     }
 
-    public void setTextoABuscar(String textoABuscar) {
+    private void setTextoABuscar(String textoABuscar) {
         this.textoABuscar_ = textoABuscar;
     }
 

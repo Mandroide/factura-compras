@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane minHeight="535.0" minWidth="1303.0" prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.producto.ProductoController">
+<AnchorPane minHeight="535.0" minWidth="1303.0" prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.producto.ProductoController">
     <HBox layoutX="238.0" layoutY="29.0" prefHeight="35.0" prefWidth="244.0">
         <Label prefHeight="28.0" prefWidth="64.0" text="Codigo: ">
             <font>
@@ -54,7 +54,7 @@
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="elimina" mnemonicParsing="false" onAction="#eliminar" prefHeight="40.0" prefWidth="103.0" text="Eliminar">
+            <Button mnemonicParsing="false" onAction="#eliminar" prefHeight="40.0" prefWidth="103.0" text="Eliminar">
                 <graphic>
                     <ImageView fitHeight="32.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../resources/botonEliminar.png" />
@@ -80,5 +80,5 @@
     <ImageView fitHeight="196.0" fitWidth="246.0" layoutX="995.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../resources/productosTabla.png" />
     </ImageView>
-    <TreeView fx:id="treeView" prefHeight="252.0" prefWidth="190.0" showRoot="false" />
+   <TreeView fx:id="treeView" layoutY="8.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
 </AnchorPane>

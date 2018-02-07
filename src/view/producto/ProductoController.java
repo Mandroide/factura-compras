@@ -149,7 +149,6 @@ public class ProductoController implements Initializable {
             String context = business.Producto.eliminar(producto.getId());
             Alert insercion = new Alert(Alert.AlertType.INFORMATION, context);
             insercion.show();
-            initTabla();
             tableView.setItems(business.Producto.mostrar());
         }
 
@@ -158,8 +157,10 @@ public class ProductoController implements Initializable {
     @FXML
     private void actualizar(TableColumn.CellEditEvent newValue){
 
-        Producto producto = tableView.getSelectionModel().getSelectedItem();
-        if (producto == null || newValue == null)
+        Producto producto = (Producto) newValue.getTableView().getItems().get(
+                newValue.getTablePosition().getRow()
+        );
+        if (producto == null)
             return;
         if (newValue.getNewValue().equals(newValue.getOldValue()))
             return;
