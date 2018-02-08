@@ -1,0 +1,18 @@
+<application>
+  <component name="libraryTable">
+    <library name="mysql-connector-java-5.1.44-bin">
+      <CLASSES>
+        <root url="jar://C:/Program Files (x86)/MySQL/Connector.J 5.1/mysql-connector-java-5.1.44-bin.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="postgresql-42.1.3">
+      <CLASSES>
+        <root url="jar://C:/Program Files (x86)/PostgreSQL/pgJDBC/postgresql-42.1.3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+  </component>
+</application>
