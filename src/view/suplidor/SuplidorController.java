@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
@@ -91,7 +92,7 @@ public class SuplidorController implements Initializable {
         columnaEmail.setCellFactory(TextFieldTableCell.forTableColumn());
         columnaTelefono.setCellFactory(TextFieldTableCell.forTableColumn());
         columnaDireccion.setCellFactory(TextFieldTableCell.forTableColumn());
-        columnaPais.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnaPais.setCellFactory(ChoiceBoxTableCell.forTableColumn(data));
         columnaCiudad.setCellFactory(TextFieldTableCell.forTableColumn());
         columnaCodigoPostal.setCellFactory(TextFieldTableCell.forTableColumn());
         columnaEstatus.setCellFactory((param) -> new RadioButtonCell<>(EnumSet.allOf(Estatus.class)));
@@ -100,25 +101,24 @@ public class SuplidorController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        llenarPaises();
         initTabla();
         tableView.setItems(business.Suplidor.mostrar());
         tableView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) ->
                 suplidor = newValue
         );
-
-        llenarPaises();
         treeView.setRoot(Main.iniciarItems());
         treeView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) ->
                 Main.cambiarScene(primaryStage, newValue));
     }
 
+    private ObservableList<String> data = FXCollections.observableArrayList();
     private void llenarPaises() {
-        ObservableList<String> data = FXCollections.observableArrayList();
+        data.add("");
         for (String countrylist : Locale.getISOCountries()) {
             Locale pais = new Locale("", countrylist);
             data.add(pais.getDisplayCountry());
         }
-        data.add("");
         Collections.sort(data);
         paises.setItems(data);
     }
