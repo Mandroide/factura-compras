@@ -4,17 +4,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.orden.OrdenActivaController">
-    <TableView fx:id="tableView" editable="true" layoutX="321.0" layoutY="181.0" prefHeight="184.0" prefWidth="858.0">
+    <TableView fx:id="tableView" editable="true" layoutX="244.0" layoutY="181.0" prefHeight="184.0" prefWidth="1082.0">
         <columns>
             <TableColumn fx:id="columnaNo" editable="false" prefWidth="49.0" text="No." />
-            <TableColumn fx:id="columnaCodigo" editable="false" prefWidth="98.0" text="Codigo" />
-            <TableColumn fx:id="columnaNombre" editable="false" prefWidth="103.0" text="Nombre" />
-            <TableColumn fx:id="columnaDescripcion" editable="false" prefWidth="140.0" sortable="false" text="Descripcion" />
-            <TableColumn fx:id="columnaCantidad" onEditCommit="#cambiarCantidad" prefWidth="61.0" text="Cantidad" />
-            <TableColumn fx:id="columnaPrecio" editable="false" prefWidth="104.0" text="Precio" />
-            <TableColumn fx:id="columnaDescuento" editable="false" prefWidth="105.0" text="Descuento" />
-            <TableColumn fx:id="columnaImpuesto" editable="false" minWidth="0.0" prefWidth="95.0" text="Impuesto" />
-            <TableColumn fx:id="columnaNeto" editable="false" prefWidth="87.0" text="Neto" />
+            <TableColumn fx:id="columnaCodigo" editable="false" prefWidth="177.0" text="Codigo" />
+            <TableColumn fx:id="columnaNombre" editable="false" prefWidth="166.0" text="Nombre" />
+            <TableColumn fx:id="columnaDescripcion" editable="false" prefWidth="259.0" sortable="false" text="Descripcion" />
+            <TableColumn fx:id="columnaCantidad" onEditCommit="#cambiarCantidad" prefWidth="64.0" text="Cantidad" />
+            <TableColumn fx:id="columnaPrecio" editable="false" prefWidth="100.0" text="Precio" />
+            <TableColumn fx:id="columnaDescuento" editable="false" prefWidth="93.0" text="Descuento" />
+            <TableColumn fx:id="columnaImpuesto" editable="false" minWidth="0.0" prefWidth="82.0" text="Impuesto" />
+            <TableColumn fx:id="columnaNeto" editable="false" prefWidth="91.0" text="Neto" />
         </columns>
     </TableView>
     <TitledPane animated="false" collapsible="false" layoutX="362.0" layoutY="12.0" prefHeight="139.0" prefWidth="307.0" text="Suplidor">

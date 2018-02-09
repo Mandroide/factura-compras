@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -130,25 +131,30 @@ public class OrdenActivaController implements Initializable {
         BigDecimal cargo = new BigDecimal(Math.random() * 300);
         BigDecimal neto = new BigDecimal(cargo.doubleValue());
         for (OrdenDetalle ordenDetalle : detalles_) {
-            bruto = bruto.add(ordenDetalle.getPrecio());
+            bruto = bruto.add(ordenDetalle.getPrecio().multiply(BigDecimal.valueOf(ordenDetalle.getCantidad())));
             descuento = descuento.add(ordenDetalle.getDescuento());
             impuesto = impuesto.add(ordenDetalle.getImpuesto());
-            neto = neto.add(ordenDetalle.getNeto());
+            neto = neto.add(ordenDetalle.getNeto().multiply(BigDecimal.valueOf(ordenDetalle.getCantidad())));
         }
-        totalBruto.setText(bruto.setScale(2, RoundingMode.CEILING).toPlainString());
-        totalDescuento.setText(descuento.setScale(2, RoundingMode.CEILING).toPlainString());
-        totalImpuesto.setText(impuesto.setScale(2, RoundingMode.CEILING).toPlainString());
-        totalCargo.setText(cargo.setScale(2, RoundingMode.CEILING).toPlainString());
-        totalNeto.setText(neto.setScale(2, RoundingMode.CEILING).toPlainString());
+        DecimalFormat format = new DecimalFormat("###,##0.00");
+
+        totalBruto.setText(format.format(bruto));
+        totalDescuento.setText(format.format(descuento));
+        totalImpuesto.setText(format.format(impuesto));
+        totalCargo.setText(format.format(cargo));
+        totalNeto.setText(format.format(neto));
     }
 
     private void cargarDetalles() {
         short linea = 0;
+        final double ITBIS = 1.18;
+
         for (Producto producto : productos_) {
             OrdenDetalle detalle = new OrdenDetalle(0, producto, cantidades_.get(producto));
             detalle.setLinea(++linea);
-            detalle.setDescuento(new BigDecimal(Math.random() * 0.3 * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
-            detalle.setImpuesto(new BigDecimal(0.05 * Math.random() * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
+            final double DESCT = 0.3 * Math.random();
+            detalle.setDescuento(new BigDecimal( DESCT * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
+            detalle.setImpuesto(new BigDecimal(ITBIS * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
             detalle.setNeto(producto.getPrecio().add(detalle.getImpuesto()).subtract(detalle.getDescuento()).setScale(2, RoundingMode.CEILING));
             detalles_.add(detalle);
         }
