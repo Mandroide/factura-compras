@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `compra`.`Suplidor` (
   UNIQUE INDEX `SuplidorEmail_UNIQUE` (`SuplidorEmail` ASC),
   UNIQUE INDEX `SuplidorDireccion_UNIQUE` (`SuplidorDireccion` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 28
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `compra`.`Orden` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 30
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `compra`.`Producto` (
   PRIMARY KEY (`ProductoId`),
   UNIQUE INDEX `UNIQUE_ProductoCodigo` (`ProductoCodigo` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 9
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `compra`.`OrdenDetalle` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 17
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -128,27 +128,25 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `compra`.`ProductoHis` ;
 
 CREATE TABLE IF NOT EXISTS `compra`.`ProductoHis` (
-  `ProductoId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ProductoId` INT(10) UNSIGNED NOT NULL,
   `ProductoCodigo` CHAR(24) NULL DEFAULT NULL,
   `ProductoNombre` VARCHAR(40) NOT NULL,
   `ProductoDescripcion` VARCHAR(70) NOT NULL,
   `ProductoUnidadesStock` INT(10) UNSIGNED NULL DEFAULT NULL,
   `ProductoPrecio` DECIMAL(10,2) UNSIGNED NOT NULL,
   `ProductoEstatus` CHAR(1) NULL DEFAULT 'A',
-  `ProductoHisFecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ProductoId`),
-  UNIQUE INDEX `UNIQUE_ProductoCodigo` (`ProductoCodigo` ASC))
+  `ProductoHisFecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `compra`.`productolog`
+-- Table `compra`.`ProductoLog`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `compra`.`productolog` ;
+DROP TABLE IF EXISTS `compra`.`ProductoLog` ;
 
-CREATE TABLE IF NOT EXISTS `compra`.`productolog` (
-  `ProductoId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `compra`.`ProductoLog` (
+  `ProductoId` INT(10) UNSIGNED NOT NULL,
   `ProductoCodigo` CHAR(24) NULL DEFAULT NULL,
   `ProductoNombre` VARCHAR(40) NOT NULL,
   `ProductoDescripcion` VARCHAR(70) NOT NULL,
@@ -156,21 +154,18 @@ CREATE TABLE IF NOT EXISTS `compra`.`productolog` (
   `ProductoPrecio` DECIMAL(10,2) UNSIGNED NOT NULL,
   `ProductoEstatus` CHAR(1) NULL DEFAULT 'A',
   `ProductoLogUsuario` VARCHAR(45) NOT NULL,
-  `ProductoLogFecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ProductoId`),
-  UNIQUE INDEX `UNIQUE_ProductoCodigo` (`ProductoCodigo` ASC))
+  `ProductoLogFecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)
 ENGINE = InnoDB
-AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `compra`.`suplidorhis`
+-- Table `compra`.`SuplidorHis`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `compra`.`suplidorhis` ;
+DROP TABLE IF EXISTS `compra`.`SuplidorHis` ;
 
-CREATE TABLE IF NOT EXISTS `compra`.`suplidorhis` (
-  `SuplidorId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `compra`.`SuplidorHis` (
+  `SuplidorId` INT(10) UNSIGNED NOT NULL,
   `SuplidorNombre` VARCHAR(100) NOT NULL,
   `SuplidorEmail` VARCHAR(254) NULL DEFAULT NULL,
   `SuplidorTelefono` VARCHAR(15) NULL DEFAULT NULL,
@@ -179,11 +174,7 @@ CREATE TABLE IF NOT EXISTS `compra`.`suplidorhis` (
   `SuplidorCiudad` VARCHAR(35) NULL DEFAULT NULL,
   `SuplidorPais` VARCHAR(70) NULL DEFAULT NULL,
   `SuplidorEstatus` CHAR(1) NOT NULL DEFAULT 'A',
-  `SuplidorHisFecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`SuplidorId`),
-  UNIQUE INDEX `SuplidorTelefono_UNIQUE` (`SuplidorTelefono` ASC),
-  UNIQUE INDEX `SuplidorEmail_UNIQUE` (`SuplidorEmail` ASC),
-  UNIQUE INDEX `SuplidorDireccion_UNIQUE` (`SuplidorDireccion` ASC))
+  `SuplidorHisFecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -204,11 +195,7 @@ CREATE TABLE IF NOT EXISTS `compra`.`SuplidorLog` (
   `SuplidorPais` VARCHAR(70) NULL DEFAULT NULL,
   `SuplidorEstatus` CHAR(1) NOT NULL DEFAULT 'A',
   `SuplidorLogFecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `SuplidorLogUsuario` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`SuplidorId`),
-  UNIQUE INDEX `SuplidorTelefono_UNIQUE` (`SuplidorTelefono` ASC),
-  UNIQUE INDEX `SuplidorEmail_UNIQUE` (`SuplidorEmail` ASC),
-  UNIQUE INDEX `SuplidorDireccion_UNIQUE` (`SuplidorDireccion` ASC))
+  `SuplidorLogUsuario` VARCHAR(45) NOT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -526,7 +513,17 @@ DELIMITER $$
 USE `compra`$$
 CREATE DEFINER=`student`@`%` PROCEDURE `Producto_MostrarActivos`()
 BEGIN
-SELECT * FROM producto_view;
+SELECT ProductoId as ID,
+ProductoCodigo AS Codigo,
+ProductoNombre AS Nombre,
+ProductoDescripcion AS Descripcion,
+ProductoUnidadesStock AS Unidades_Stock,
+ProductoPrecio AS Precio, 
+ProductoEstatus AS Estatus 
+FROM Producto
+WHERE ProductoEstatus = 'A'
+ORDER BY ProductoId DESC
+LIMIT 200;
 END$$
 
 DELIMITER ;
@@ -753,7 +750,19 @@ DELIMITER $$
 USE `compra`$$
 CREATE DEFINER=`student`@`%` PROCEDURE `Suplidor_MostrarActivos`()
 BEGIN
-SELECT * FROM suplidor_view;
+SELECT SuplidorId AS Id, 
+SuplidorNombre AS Nombre, 
+SuplidorEmail AS Email,
+SuplidorTelefono AS Telefono,
+SuplidorDireccion AS Direccion, 
+SuplidorCodigoPostal AS Codigo_Postal,
+SuplidorCiudad AS Ciudad,
+SuplidorPais AS Pais,
+SuplidorEstatus AS Estatus
+FROM Suplidor
+WHERE SuplidorEstatus = 'A'
+ORDER BY SuplidorId DESC
+LIMIT 200;
 END$$
 
 DELIMITER ;
@@ -956,7 +965,7 @@ BEGIN
 
 UPDATE Orden
 SET OrdenTotalBruto = 
-OrdenTotalBruto + NEW.OrdenDetallePrecio,
+OrdenTotalBruto + NEW.OrdenDetallePrecio * NEW.OrdenDetalleCantidad,
 OrdenTotalImpuesto = 
 OrdenTotalImpuesto + NEW.OrdenDetalleImpuesto,
 OrdenTotalDescto = 
@@ -979,24 +988,7 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+
 CREATE USER 'user'@'%' IDENTIFIED BY 'user123';
 
 GRANT SELECT, INSERT, UPDATE, TRIGGER, EXECUTE ON compra.* TO 'user'@'%'
-
-INSERT INTO Suplidor(SuplidorNombre, SuplidorEmail)
-VALUES ('Apple Inc.', 'apple@example.com');
-
-
-INSERT INTO Producto(ProductoCodigo, ProductoNombre, ProductoPrecio, ProductoUnidadesStock)
-VALUES ('DW347QESAA79QWE36WE1', 'iPhone 7', 37000.00, 3);
-
-INSERT INTO Orden(SuplidorId, OrdenNumero)
-VALUES(1, 12);
-
-INSERT INTO OrdenDetalle(OrdenId, ProductoId, OrdenDetalleCantidad)
-VALUES(1, 1, 2);
-
-CALL Suplidor_Mostrar();
-CALL Producto_Mostrar();
-CALL Orden_Mostrar();
-CALL OrdenDetalle_Mostrar(1);
