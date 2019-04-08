@@ -34,7 +34,7 @@ public class Main extends Application {
     }
 
     public static TreeItem<String> iniciarItems() {
-        ImageView iconSuplidor = new ImageView(
+        var iconSuplidor = new ImageView(
                 new Image(Main.class.getResourceAsStream("/view/resources/suplidores.png"))
         );
         iconSuplidor.setFitWidth(15);
@@ -43,7 +43,7 @@ public class Main extends Application {
         TreeItem<String> rootSuplidor = new TreeItem<>("Suplidor");
         rootSuplidor.getChildren().add(nodoSuplidores);
 
-        ImageView iconProducto = new ImageView(
+        var iconProducto = new ImageView(
                 new Image(Main.class.getResourceAsStream("/view/resources/productos.png"))
         );
         iconProducto.setFitWidth(15);
@@ -53,7 +53,7 @@ public class Main extends Application {
         rootProducto.getChildren().add(nodoProductos);
 
 
-        ImageView iconOrden = new ImageView(
+        var iconOrden = new ImageView(
                 new Image(Main.class.getResourceAsStream("/view/resources/ordenes.png"))
         );
         iconOrden.setFitWidth(15);

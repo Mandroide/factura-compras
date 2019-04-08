@@ -58,20 +58,22 @@ public class Orden {
         setId(id);
     }
 
-    private void insertarDetalles(Connection conn, Orden orden, ObservableList<OrdenDetalle> detalles) throws SQLException {
-
+    private void insertarDetalles(Connection conn, Orden orden, ObservableList<OrdenDetalle> detalles)
+            throws SQLException {
 
         for (OrdenDetalle detalle : detalles) {
             detalle.setIdOrden(orden.getId());
-            AtomicReference<CallableStatement> procedure = new AtomicReference<>(conn.prepareCall("{call OrdenDetalle_Insertar( ?, ?, ?, ?, ?, ?)}"));
-            procedure.get().setInt("id", detalle.getIdOrden());
-            procedure.get().setInt("productoId", detalle.getProductoId());
-            procedure.get().setBigDecimal("precio", detalle.getPrecio());
-            procedure.get().setInt("cantidad", detalle.getCantidad());
-            procedure.get().setBigDecimal("impuesto", detalle.getImpuesto());
-            procedure.get().setBigDecimal("descuento", detalle.getDescuento());
+            var statement = new AtomicReference<>(conn.prepareStatement(
+                    "SELECT * FROM OrdenDetalle_Insertar(" +
+                            "id := ?, productoid := ?, precio := ?, cantidad := ?, descuento := ?, impuesto := ?)")).get();
+            statement.setInt(1, detalle.getIdOrden());
+            statement.setInt(2, detalle.getProductoId());
+            statement.setBigDecimal(3, detalle.getPrecio());
+            statement.setInt(4, detalle.getCantidad());
+            statement.setBigDecimal(5, detalle.getImpuesto());
+            statement.setBigDecimal(6, detalle.getDescuento());
 
-            boolean esEjecutado = (procedure.get().executeUpdate() > 0);
+            boolean esEjecutado = statement.execute();
             if (!esEjecutado) {
                 throw new SQLException();
             }
@@ -85,13 +87,15 @@ public class Orden {
             try {
                 // Deshabilita auto transaccion.
                 conn.setAutoCommit(false);
-                AtomicReference<CallableStatement> query = new AtomicReference<>(conn.prepareCall("{call Orden_Insertar(?, ?)}"));
-                query.get().registerOutParameter("id", JDBCType.INTEGER);
-                query.get().setInt("suplidorId", orden.getSuplidorId());
+                var query = new AtomicReference<>(conn.prepareStatement("INSERT INTO Orden(SuplidorId) "
+                        + "VALUES ( ? ) RETURNING ordenid;")).get();
+                query.setInt(1, orden.getSuplidorId());
 
-                boolean esEjecutado = (query.get().executeUpdate() > 0);
+                boolean esEjecutado = query.execute();
                 if (esEjecutado) {
-                    orden.setId(query.get().getInt("id"));
+                    var rs = query.getResultSet();
+                    rs.next();
+                    orden.setId(rs.getInt(1));
                     insertarDetalles(conn, orden, detalles);
                     conn.commit(); // Confirma la transaccion.
                     mensaje = "El registro ha sido agregado exitosamente.";
@@ -117,9 +121,10 @@ public class Orden {
     public String eliminar(Orden orden) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call Orden_Eliminar(?)}")) {
+            try (var query = conn.prepareStatement("UPDATE Orden SET OrdenEstatus = 'C'"
+                    + " WHERE OrdenId = ?;")) {
 
-                query.setInt("id", orden.id_);
+                query.setInt(1, orden.id_);
                 boolean esEjecutado = (query.executeUpdate() > 0);
                 if (esEjecutado) {
                     mensaje = "La orden ha sido cancelada exitosamente.";
@@ -143,7 +148,7 @@ public class Orden {
     public ObservableList<Orden> mostrar() {
         ObservableList<Orden> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar();
-             CallableStatement query = conn.prepareCall("{call Orden_Mostrar}")) {
+             var query = conn.prepareStatement("SELECT * FROM Orden_mostrar()")) {
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
 
@@ -181,9 +186,9 @@ public class Orden {
         // Texto
         ObservableList<OrdenDetalle> detalles_ = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call OrdenDetalle_Mostrar(?)}");
-            query.setInt("numero", numero);
-            ResultSet resultSet = query.executeQuery();
+            var query = conn.prepareStatement("SELECT * FROM OrdenDetalle_Mostrar(?)}");
+            query.setInt(1, numero);
+            var resultSet = query.executeQuery();
             while (resultSet.next()) {
 
                 final short linea = resultSet.getShort("Linea");
@@ -202,8 +207,7 @@ public class Orden {
                 BigDecimal descuento = resultSet.getBigDecimal("Descuento");
                 BigDecimal impuesto = resultSet.getBigDecimal("Impuesto");
                 BigDecimal neto = resultSet.getBigDecimal("Neto");
-                OrdenDetalle detalle = new OrdenDetalle();
-                OrdenDetalle obj = new OrdenDetalle(id_, producto,  cantidad,
+                var obj = new OrdenDetalle(id_, producto,  cantidad,
                         descuento, impuesto, neto);
                 obj.setLinea(linea);
                 detalles_.add(obj);

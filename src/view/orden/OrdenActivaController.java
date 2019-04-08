@@ -130,7 +130,7 @@ public class OrdenActivaController implements Initializable {
         BigDecimal impuesto = new BigDecimal("0.00");
         BigDecimal cargo = new BigDecimal(Math.random() * 300);
         BigDecimal neto = new BigDecimal(cargo.doubleValue());
-        for (OrdenDetalle ordenDetalle : detalles_) {
+        for (var ordenDetalle : detalles_) {
             bruto = bruto.add(ordenDetalle.getPrecio().multiply(BigDecimal.valueOf(ordenDetalle.getCantidad())));
             descuento = descuento.add(ordenDetalle.getDescuento());
             impuesto = impuesto.add(ordenDetalle.getImpuesto());
@@ -149,8 +149,8 @@ public class OrdenActivaController implements Initializable {
         short linea = 0;
         final double ITBIS = 1.18;
 
-        for (Producto producto : productos_) {
-            OrdenDetalle detalle = new OrdenDetalle(0, producto, cantidades_.get(producto));
+        for (var producto : productos_) {
+            var detalle = new OrdenDetalle(0, producto, cantidades_.get(producto));
             detalle.setLinea(++linea);
             final double DESCT = 0.3 * Math.random();
             detalle.setDescuento(new BigDecimal( DESCT * producto.getPrecio().doubleValue()).setScale(2, RoundingMode.CEILING));
@@ -162,7 +162,7 @@ public class OrdenActivaController implements Initializable {
 
     @FXML
     private void cambiarCantidad(TableColumn.CellEditEvent newValue){
-        OrdenDetalle detalle = tableView.getSelectionModel().getSelectedItem();
+        var detalle = tableView.getSelectionModel().getSelectedItem();
 
         if (detalle == null || newValue == null)
             return;

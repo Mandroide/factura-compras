@@ -114,7 +114,7 @@ public class ProductoController implements Initializable {
                 "Unidades en Stock: " + unidadesStock.getText() + "\n" +
                 "Precio: " + precio.getText() + "\n";
 
-        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        var alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("\"¿Desea continuar?\"");
         alerta.setHeaderText(mensaje);
         return alerta.showAndWait().isPresent();
@@ -157,7 +157,7 @@ public class ProductoController implements Initializable {
     @FXML
     private void actualizar(TableColumn.CellEditEvent newValue){
 
-        Producto producto = (Producto) newValue.getTableView().getItems().get(
+        var producto = (Producto) newValue.getTableView().getItems().get(
                 newValue.getTablePosition().getRow()
         );
         if (producto == null)

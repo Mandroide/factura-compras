@@ -61,12 +61,13 @@ public class Producto {
     public String insertar(Producto producto) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call Producto_insertar(?, ?, ?, ?, ?)}")) {
-                query.setString("codigo", producto.codigo_);
-                query.setString("nombre", producto.nombre_);
-                query.setString("descripcion", producto.descripcion_);
-                query.setBigDecimal("precio", producto.precio_);
-                query.setInt("unidadesStock", producto.unidadesStock_);
+            try (var query = conn.prepareStatement("INSERT INTO Producto(ProductoCodigo, ProductoNombre, "
+                    + "ProductoDescripcion, ProductoPrecio, ProductoUnidadesStock) VALUES (?, ?, ?, ?, ?);")) {
+                query.setString(1, producto.codigo_);
+                query.setString(2, producto.nombre_);
+                query.setString(3, producto.descripcion_);
+                query.setBigDecimal(4, producto.precio_);
+                query.setInt(5, producto.unidadesStock_);
 
                 boolean esEjecutado =  (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -90,14 +91,16 @@ public class Producto {
     public String actualizar(Producto producto) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call Producto_Actualizar(?, ?, ?, ?, ?, ?, ?)}")) {
-                query.setInt("id", producto.id_); // Modificar
-                query.setString("codigo", producto.codigo_);
-                query.setString("nombre", producto.nombre_);
-                query.setString("descripcion", producto.descripcion_);
-                query.setBigDecimal("precio", producto.precio_);
-                query.setInt("unidadesStock", producto.unidadesStock_);
-                query.setString("estatus", producto.getEstatus().getChar());
+            try (var query = conn.prepareStatement("UPDATE Producto SET ProductoNombre = ?,\n" +
+                    "ProductoDescripcion = ?, ProductoPrecio = ?, ProductoUnidadesStock = ?, ProductoCodigo = ?,"
+                    + "ProductoEstatus = ? WHERE ProductoId = ?;")) {
+                query.setString(1, producto.codigo_);
+                query.setString(2, producto.nombre_);
+                query.setString(3, producto.descripcion_);
+                query.setBigDecimal(4, producto.precio_);
+                query.setInt(5, producto.unidadesStock_);
+                query.setString(6, producto.getEstatus().getChar());
+                query.setInt(7, producto.id_); // Modificar
 
                 boolean esEjecutado = (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -122,8 +125,9 @@ public class Producto {
     public String eliminar(Producto producto) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call Producto_Eliminar(?)}")) {
-                query.setInt("id", producto.id_);
+            try (var query = conn.prepareStatement("UPDATE Producto SET ProductoEstatus = 'I'"
+                    + "WHERE ProductoId = ? ;")) {
+                query.setInt(1, producto.id_);
 
                 boolean esEjecutado  = (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -148,8 +152,8 @@ public class Producto {
     public ObservableList<Producto> buscar(Producto producto) {
         ObservableList<Producto> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call Producto_Buscar(?)}");
-            query.setString("nombre", producto.textoABuscar_);
+            var query = conn.prepareStatement("SELECT * from producto_buscar(?)");
+            query.setString(1, producto.textoABuscar_);
             data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
@@ -161,7 +165,7 @@ public class Producto {
     public ObservableList<Producto> mostrar() {
         ObservableList<Producto> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call Producto_Mostrar}");
+            var query = conn.prepareStatement("SELECT * from producto_mostrar()");
             data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,7 +177,7 @@ public class Producto {
     public ObservableList<Producto> mostrarActivos() {
         ObservableList<Producto> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call Producto_MostrarActivos}");
+            var query = conn.prepareStatement("SELECT * from producto_mostraractivos()");
             data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);

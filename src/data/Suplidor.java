@@ -3,10 +3,7 @@ package data;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,15 +57,17 @@ public class Suplidor {
 
     public String insertar(Suplidor suplidor) {
         String mensaje;
-        try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call Suplidor_Insertar(?, ?, ?, ?, ?, ?, ?)}")) {
-                query.setString("nombre", suplidor.nombre_);
-                query.setString("direccion", suplidor.direccion_);
-                query.setString("ciudad", suplidor.ciudad_);
-                query.setString("email", suplidor.email_);
-                query.setString("telefono", suplidor.telefono_);
-                query.setString("codigoPostal", suplidor.codigoPostal_);
-                query.setString("pais", suplidor.pais_);
+        try (var conn = Conexion.conectar()) {
+            try (var query = conn.prepareStatement("INSERT INTO suplidor(SuplidorNombre, " +
+                    "SuplidorDireccion, SuplidorCiudad, SuplidorEmail, SuplidorTelefono, SuplidorCodigoPostal, " +
+                    "SuplidorPais) VALUES (?, ?, ?, ?, ?, ?, ?);")) {
+                query.setString(1, suplidor.nombre_);
+                query.setString(2, suplidor.direccion_);
+                query.setString(3, suplidor.ciudad_);
+                query.setString(4, suplidor.email_);
+                query.setString(5, suplidor.telefono_);
+                query.setString(6, suplidor.codigoPostal_);
+                query.setString(7, suplidor.pais_);
 
                 int tuplas = query.executeUpdate();
                 if (tuplas > 0) {
@@ -93,17 +92,19 @@ public class Suplidor {
 
     public String actualizar(Suplidor suplidor) {
         String mensaje;
-        try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call Suplidor_Actualizar(?, ?, ?, ?, ?, ?, ?, ?, ?)}")) {
-                query.setInt("id", suplidor.id_); // Modificar
-                query.setString("nombre", suplidor.nombre_);
-                query.setString("direccion", suplidor.direccion_);
-                query.setString("ciudad", suplidor.ciudad_);
-                query.setString("email", suplidor.email_);
-                query.setString("telefono", suplidor.telefono_);
-                query.setString("codigoPostal", suplidor.codigoPostal_);
-                query.setString("pais", suplidor.pais_);
-                query.setString("estatus", suplidor.estatus_.getChar());
+        try (var conn = Conexion.conectar()) {
+            try (var query = conn.prepareStatement("UPDATE Suplidor SET SuplidorNombre = ?," +
+                    "SuplidorDireccion = ?, SuplidorCiudad = ?, SuplidorEmail = ?, SuplidorTelefono = ?," +
+                    "SuplidorCodigoPostal = ?, SuplidorPais = ?, SuplidorEstatus = ? WHERE SuplidorId = ? ;\n")) {
+                query.setString(1, suplidor.nombre_);
+                query.setString(2, suplidor.direccion_);
+                query.setString(3, suplidor.ciudad_);
+                query.setString(4, suplidor.email_);
+                query.setString(5, suplidor.telefono_);
+                query.setString(6, suplidor.codigoPostal_);
+                query.setString(7, suplidor.pais_);
+                query.setString(8, suplidor.estatus_.getChar());
+                query.setInt(9, suplidor.id_); // Modificar
 
                 boolean esEjecutado = (query.executeUpdate() > 0);
                 if (esEjecutado) {
@@ -128,9 +129,10 @@ public class Suplidor {
 
     public String eliminar(Suplidor suplidor) {
         String mensaje;
-        try (Connection conn = Conexion.conectar()) {
-            try (CallableStatement query = conn.prepareCall("{call Suplidor_Eliminar(?)}")) {
-                query.setInt("id", suplidor.id_);
+        try (var conn = Conexion.conectar()) {
+            try (var query = conn.prepareStatement("UPDATE Suplidor SET SuplidorEstatus = 'I'"
+                    + "WHERE SuplidorId = ?;")) {
+                query.setInt(1, suplidor.id_);
 
                 int tupla = query.executeUpdate();
                 if (tupla > 0) {
@@ -155,8 +157,8 @@ public class Suplidor {
     public ObservableList<Suplidor> buscar(Suplidor suplidor) {
         ObservableList<Suplidor> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call Suplidor_Buscar(?)}");
-            query.setString("nombre", suplidor.textoABuscar_);
+            var query = conn.prepareStatement("SELECT * from suplidor_buscar(?)");
+            query.setString(1, suplidor.textoABuscar_);
             data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -167,9 +169,9 @@ public class Suplidor {
 
     public ObservableList<Suplidor> buscarActivos(Suplidor suplidor) {
         ObservableList<Suplidor> data = FXCollections.observableArrayList();
-        try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call Suplidor_BuscarActivos(?)}");
-            query.setString("nombre", suplidor.textoABuscar_);
+        try (var conn = Conexion.conectar()) {
+            var query = conn.prepareStatement("SELECT * from suplidor_buscaractivos(?)");
+            query.setString(1, suplidor.textoABuscar_);
             data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -180,8 +182,8 @@ public class Suplidor {
 
     public ObservableList<Suplidor> mostrar() {
         ObservableList<Suplidor> data = FXCollections.observableArrayList();
-        try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call Suplidor_Mostrar}");
+        try (var conn = Conexion.conectar()) {
+            var query = conn.prepareStatement("SELECT * from suplidor_mostrar()");
             data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,7 +194,7 @@ public class Suplidor {
     public ObservableList<Suplidor> mostrarActivos() {
         ObservableList<Suplidor> data = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            CallableStatement query = conn.prepareCall("{call Suplidor_MostrarActivos}");
+            var query = conn.prepareStatement("SELECT * from suplidor_mostraractivos()");
             data = leer(query.executeQuery());
         } catch (SQLException ex) {
             Logger.getLogger(Suplidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -216,8 +218,8 @@ public class Suplidor {
         final String direccion = resultSet.getString("Direccion");
         final String pais = resultSet.getString("Pais");
         final String ciudad = resultSet.getString("Ciudad");
-        final String codigoPostal = resultSet.getString("Codigo_Postal");
-        Suplidor suplidor = new Suplidor(nombre, direccion, ciudad, email, telefono, codigoPostal, pais);
+        final String codigoPostal = resultSet.getString("CodigoPostal");
+        var suplidor = new Suplidor(nombre, direccion, ciudad, email, telefono, codigoPostal, pais);
         suplidor.setId(no);
 
         HashMap<String, Estatus> opciones = new HashMap<>();
@@ -302,7 +304,7 @@ public class Suplidor {
     }
 
     private void setTextoABuscar(String textoABuscar) {
-        this.textoABuscar_ = textoABuscar;
+        textoABuscar_ = textoABuscar;
     }
 
 }
