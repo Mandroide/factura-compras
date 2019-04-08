@@ -420,6 +420,96 @@ TABLESPACE pg_default;
 ALTER TABLE productohis
     OWNER to postgres;
 
+-- -------------------- FUNCIONES PRODUCTO ---------------------
+
+-- FUNCTION: public.producto_buscar(character varying)
+
+-- DROP FUNCTION public.producto_buscar(character varying);
+
+CREATE OR REPLACE FUNCTION public.producto_buscar(
+	nom character varying)
+    RETURNS TABLE(id integer, codigo character, nombre character varying, descripcion character varying, unidades_stock integer, precio numeric, estatus character) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$BEGIN
+RETURN QUERY
+SELECT ProductoId ID,
+ProductoCodigo Codigo,
+ProductoNombre Nombre,
+ProductoDescripcion Descripcion,
+ProductoUnidadesStock Unidades_Stock,
+ProductoPrecio Precio, 
+ProductoEstatus Estatus 
+FROM Producto
+WHERE ProductoNombre LIKE CONCAT(nom, '%');
+END;$BODY$;
+
+ALTER FUNCTION public.producto_buscar(character varying)
+    OWNER TO postgres;
+
+-- FUNCTION: producto_mostrar()
+
+-- DROP FUNCTION producto_mostrar();
+
+CREATE OR REPLACE FUNCTION producto_mostrar(
+	)
+    RETURNS TABLE(id integer, codigo character, nombre character varying, descripcion character varying, unidades_stock integer, precio numeric, estatus character) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$ BEGIN
+RETURN QUERY
+SELECT ProductoId,
+ProductoCodigo,
+ProductoNombre,
+ProductoDescripcion,
+ProductoUnidadesStock,
+ProductoPrecio, 
+ProductoEstatus 
+FROM Producto
+ORDER BY ProductoId DESC
+LIMIT 200;
+END;$BODY$;
+
+ALTER FUNCTION producto_mostrar()
+    OWNER TO postgres;
+
+-- FUNCTION: producto_mostraractivos()
+
+-- DROP FUNCTION producto_mostraractivos();
+
+CREATE OR REPLACE FUNCTION producto_mostraractivos(
+	)
+    RETURNS TABLE(id integer, codigo character, nombre character varying, descripcion character varying, unidades_stock integer, precio numeric, estatus character) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$ BEGIN
+RETURN QUERY
+SELECT ProductoId ID,
+ProductoCodigo Codigo,
+ProductoNombre Nombre,
+ProductoDescripcion Descripcion,
+ProductoUnidadesStock Unidades_Stock,
+ProductoPrecio Precio, 
+ProductoEstatus Estatus 
+FROM Producto
+WHERE ProductoEstatus = 'A'
+ORDER BY ProductoId DESC
+LIMIT 200;
+END;$BODY$;
+
+ALTER FUNCTION producto_mostraractivos()
+    OWNER TO postgres;
+
+
 -- ************** ORDEN *********************
 -- SEQUENCE: orden_ordenid_seq
 
