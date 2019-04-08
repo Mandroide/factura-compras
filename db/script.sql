@@ -520,11 +520,7 @@ CREATE SEQUENCE orden_ordenid_seq;
 ALTER SEQUENCE orden_ordenid_seq
     OWNER TO postgres;
 
--- Table: orden
-
--- DROP TABLE orden;
-
-CREATE TABLE orden
+CREATE TABLE public.orden
 (
     ordenid integer NOT NULL DEFAULT nextval('orden_ordenid_seq'::regclass),
     ordennumero integer NOT NULL DEFAULT nextval('orden_ordenid_seq'::regclass),
@@ -535,10 +531,10 @@ CREATE TABLE orden
     ordentotaldescto numeric(8,2) DEFAULT 0.00,
     ordentotalimpuesto numeric(8,2) DEFAULT 0.00,
     ordentotalcargo numeric(8,2) DEFAULT 200.00,
-    ordentotalneto numeric(12,2),
+    ordentotalneto numeric(12,2) DEFAULT 0.00,
     CONSTRAINT pk_orden PRIMARY KEY (ordenid),
     CONSTRAINT "FK_SuplidorId" FOREIGN KEY (suplidorid)
-        REFERENCES suplidor (suplidorid) MATCH SIMPLE
+        REFERENCES public.suplidor (suplidorid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -547,7 +543,37 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE orden
+ALTER TABLE public.orden
+    OWNER to postgres;
+
+-- Table: public.orden
+
+-- DROP TABLE public.orden;
+
+CREATE TABLE public.orden
+(
+    ordenid integer NOT NULL DEFAULT nextval('orden_ordenid_seq'::regclass),
+    ordennumero integer NOT NULL DEFAULT nextval('orden_ordenid_seq'::regclass),
+    suplidorid integer,
+    ordenfecha timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    ordenestatus character(1) COLLATE pg_catalog."default" DEFAULT 'P'::bpchar,
+    ordentotalbruto numeric(12,2) DEFAULT 0.00,
+    ordentotaldescto numeric(8,2) DEFAULT 0.00,
+    ordentotalimpuesto numeric(8,2) DEFAULT 0.00,
+    ordentotalcargo numeric(8,2) DEFAULT 200.00,
+    ordentotalneto numeric(12,2) DEFAULT 0.00,
+    CONSTRAINT pk_orden PRIMARY KEY (ordenid),
+    CONSTRAINT "FK_SuplidorId" FOREIGN KEY (suplidorid)
+        REFERENCES public.suplidor (suplidorid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.orden
     OWNER to postgres;
 
 -- SEQUENCE: ordendetalle_ordendetallelinea_seq

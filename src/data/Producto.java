@@ -91,8 +91,8 @@ public class Producto {
     public String actualizar(Producto producto) {
         String mensaje;
         try (Connection conn = Conexion.conectar()) {
-            try (var query = conn.prepareStatement("UPDATE Producto SET ProductoNombre = ?,\n" +
-                    "ProductoDescripcion = ?, ProductoPrecio = ?, ProductoUnidadesStock = ?, ProductoCodigo = ?,"
+            try (var query = conn.prepareStatement("UPDATE Producto SET  ProductoCodigo = ?, " +
+                    "ProductoNombre = ?, ProductoDescripcion = ?, ProductoPrecio = ?, ProductoUnidadesStock = ?,"
                     + "ProductoEstatus = ? WHERE ProductoId = ?;")) {
                 query.setString(1, producto.codigo_);
                 query.setString(2, producto.nombre_);

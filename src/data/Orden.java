@@ -186,7 +186,7 @@ public class Orden {
         // Texto
         ObservableList<OrdenDetalle> detalles_ = FXCollections.observableArrayList();
         try (Connection conn = Conexion.conectar()) {
-            var query = conn.prepareStatement("SELECT * FROM OrdenDetalle_Mostrar(?)}");
+            var query = conn.prepareStatement("SELECT * FROM OrdenDetalle_Mostrar(?)");
             query.setInt(1, numero);
             var resultSet = query.executeQuery();
             while (resultSet.next()) {
