@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
@@ -37,6 +37,7 @@
             </HBox>
         </AnchorPane>
     </TitledPane>
+    <Separator layoutX="604.0" layoutY="528.0" prefHeight="3.0" prefWidth="246.0" />
     <VBox layoutX="608.0" layoutY="397.0" prefHeight="191.0" prefWidth="292.0">
         <HBox prefHeight="33.0" prefWidth="196.0">
             <Label prefHeight="33.0" prefWidth="131.0" text="Total Bruto: ">
@@ -132,10 +133,13 @@
         <Label prefHeight="46.0" prefWidth="48.0" text="Hora: " />
         <Label fx:id="hora" prefHeight="46.0" prefWidth="74.0" text="4:00 p.m." />
     </HBox>
-    <Button layoutX="674.0" layoutY="57.0" mnemonicParsing="false" onAction="#cancelarOrden" text="Cancelar Orden" />
     <HBox layoutX="408.0" layoutY="41.0" prefHeight="32.0" prefWidth="152.0">
         <Label prefHeight="22.0" prefWidth="58.0" text="Numero: " />
         <Label fx:id="numero" prefHeight="24.0" prefWidth="39.0" text="798434" />
     </HBox>
-    <Separator layoutX="604.0" layoutY="528.0" prefHeight="3.0" prefWidth="246.0" />
+   <JFXButton buttonType="RAISED" layoutX="576.0" layoutY="75.0" onAction="#cancelarOrden" style="-fx-background-color: #D83535;" text="Cancelar Orden" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="16.0" />
+      </font>
+   </JFXButton>
 </AnchorPane>
