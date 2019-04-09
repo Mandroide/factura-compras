@@ -1,5 +1,7 @@
 package view.producto;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import data.Producto;
 import data.Suplidor;
 import javafx.fxml.FXML;
@@ -44,8 +46,6 @@ public class ProductoActivoController implements Initializable {
     @FXML
     private TableView<Producto> tableView;
     @FXML
-    private TableColumn<Producto, Boolean> checkCol;
-    @FXML
     private TableColumn<?, ?> columnaNo;
     @FXML
     private TableColumn<?, ?> columnaNombre;
@@ -59,7 +59,6 @@ public class ProductoActivoController implements Initializable {
     private TableColumn<?, ?> columnaCodigo;
 
     private void initTabla() {
-        //checkCol.setCellValueFactory( new PropertyValueFactory<Producto,Boolean>( "checkBoxValue" ) );
         columnaNo.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columnaDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
@@ -125,13 +124,13 @@ public class ProductoActivoController implements Initializable {
 
 
     @FXML
-    private Button botonContinuar;
+    private JFXButton botonContinuar;
     @FXML
-    private Button botonAgregar;
+    private JFXButton botonAgregar;
     @FXML
-    private Button botonRemover;
+    private JFXButton botonRemover;
     @FXML
-    private TextField cantidad;
+    private JFXTextField cantidad;
 
     @FXML
     private void agregar() {

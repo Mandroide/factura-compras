@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.orden.OrdenActivaController">
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTreeView?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.orden.OrdenActivaController">
     <TableView fx:id="tableView" editable="true" layoutX="244.0" layoutY="181.0" prefHeight="184.0" prefWidth="1082.0">
         <columns>
             <TableColumn fx:id="columnaNo" editable="false" prefWidth="49.0" text="No." />
@@ -79,11 +88,19 @@
         <Label prefHeight="46.0" prefWidth="48.0" text="Hora: " />
         <Label fx:id="hora" prefHeight="46.0" prefWidth="74.0" text="4:00 p.m." />
     </HBox>
-    <ButtonBar layoutX="994.0" layoutY="491.0" prefHeight="40.0" prefWidth="200.0">
-        <buttons>
-            <Button mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
-            <Button mnemonicParsing="false" onAction="#confirmar" text="Confirmar" />
-        </buttons>
+    <ButtonBar layoutX="994.0" layoutY="491.0" prefHeight="40.0" prefWidth="252.0">
+      <buttons>
+         <JFXButton cancelButton="true" onAction="#cancelar" style="-fx-border-color: gray;" text="Cancelar" textFill="GREY">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+         </JFXButton>
+         <JFXButton defaultButton="true" onAction="#confirmar" style="-fx-background-color: teal;" text="Confirmar" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+         </JFXButton>
+      </buttons>
     </ButtonBar>
-   <TreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
+   <JFXTreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
 </AnchorPane>

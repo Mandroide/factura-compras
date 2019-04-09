@@ -1,5 +1,7 @@
 package view.suplidor;
 
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import data.Estatus;
 import data.Suplidor;
 import javafx.collections.FXCollections;
@@ -37,20 +39,20 @@ public class SuplidorController implements Initializable {
     }
 
     @FXML
-    private TextField nombre;
+    private JFXTextField nombre;
     @FXML
-    private TextField email;
+    private JFXTextField email;
     @FXML
-    private TextField telefono;
+    private JFXTextField telefono;
     @FXML
-    private TextField direccion;
+    private JFXTextField direccion;
     @FXML
-    private TextField ciudad;
+    private JFXTextField ciudad;
     @FXML
-    private TextField codigoPostal;
+    private JFXTextField codigoPostal;
 
     @FXML
-    private ChoiceBox<String> paises;
+    private JFXComboBox<String> paises;
 
     @FXML
     private TableView<data.Suplidor> tableView;
@@ -115,8 +117,8 @@ public class SuplidorController implements Initializable {
     private ObservableList<String> data = FXCollections.observableArrayList();
     private void llenarPaises() {
         data.add("");
-        for (String countrylist : Locale.getISOCountries()) {
-            Locale pais = new Locale("", countrylist);
+        for (var countrylist : Locale.getISOCountries()) {
+            var pais = new Locale("", countrylist);
             data.add(pais.getDisplayCountry());
         }
         Collections.sort(data);
@@ -193,7 +195,7 @@ public class SuplidorController implements Initializable {
 
     @FXML
     private void actualizar(TableColumn.CellEditEvent newValue) {
-        data.Suplidor suplidor = (Suplidor) newValue.getTableView().getItems().get(
+        var suplidor = (Suplidor) newValue.getTableView().getItems().get(
                 newValue.getTablePosition().getRow()
         );
         if (suplidor == null)

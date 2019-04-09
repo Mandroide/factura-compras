@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorActivoController">
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorActivoController">
     <HBox layoutX="235.0" layoutY="28.0" prefHeight="45.0" prefWidth="252.0">
         <Label prefHeight="17.0" prefWidth="60.0" text="Nombre: " />
-        <TextField fx:id="nombre" onKeyTyped="#completarNombre" />
+      <JFXTextField fx:id="nombre" onKeyTyped="#completarNombre" prefWidth="149.0" style="-fx-background-color: white;" />
         <ImageView fitHeight="26.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../resources/buscarTexto.png" />
         </ImageView>
     </HBox>
-    <Button fx:id="botonSiguiente" defaultButton="true" disable="true" layoutX="540.0" layoutY="28.0" mnemonicParsing="false" onAction="#continuar" text="Siguiente" />
     <TableView fx:id="tableView" layoutX="224.0" layoutY="136.0" prefHeight="327.0" prefWidth="1105.0">
         <columns>
             <TableColumn fx:id="columnaNo" prefWidth="63.0" text="No." />
@@ -26,5 +32,15 @@
             <TableColumn fx:id="columnaPais" prefWidth="167.0" text="Pais" />
         </columns>
     </TableView>
-   <TreeView fx:id="treeView" layoutX="14.0" layoutY="14.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
+   <JFXButton fx:id="botonSiguiente" defaultButton="true" disable="true" layoutX="492.0" layoutY="22.0" onAction="#continuar" prefHeight="35.0" prefWidth="124.0" style="-fx-background-color: blue;" text="Siguiente" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="15.0" />
+      </font>
+      <graphic>
+          <ImageView fitHeight="24.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@../resources/botonSiguiente.png"/>
+          </ImageView>
+      </graphic>
+   </JFXButton>
+   <JFXTreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
 </AnchorPane>

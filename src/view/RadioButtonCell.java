@@ -1,5 +1,6 @@
 package view;
 
+import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.RadioButton;
@@ -32,7 +33,7 @@ public class RadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
 
             // create a radio button for each 'element' of the enumeration
             for (Enum<T> enumElement : enumeration) {
-                RadioButton radioButton = new RadioButton(enumElement.toString());
+                var radioButton = new JFXRadioButton(enumElement.toString());
                 radioButton.setUserData(enumElement);
                 radioButton.setToggleGroup(group);
                 hb.getChildren().add(radioButton);

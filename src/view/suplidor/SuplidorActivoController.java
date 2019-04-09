@@ -1,5 +1,7 @@
 package view.suplidor;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import data.Suplidor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -66,9 +68,9 @@ public class SuplidorActivoController implements Initializable {
     }
 
     @FXML
-    private TextField nombre;
+    private JFXTextField nombre;
     @FXML
-    private Button botonSiguiente;
+    private JFXButton botonSiguiente;
 
 
     @Override

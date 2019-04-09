@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="factura-compras:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/factura_compras_jar</output-path>
-    <root id="archive" name="factura-compras.jar">
-      <element id="module-output" name="factura-compras" />
-      <element id="extracted-dir" path="C:/Program Files (x86)/MySQL/Connector.J 5.1/mysql-connector-java-5.1.44-bin.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>

@@ -1,37 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorController">
-    <HBox layoutX="251.0" layoutY="17.0" prefHeight="41.0" prefWidth="291.0">
-        <Label prefHeight="25.0" prefWidth="55.0" text="Nombre:  " />
-        <TextField fx:id="nombre" onKeyTyped="#buscar" prefHeight="25.0" prefWidth="209.0" />
-    </HBox>
-    <HBox layoutX="265.0" layoutY="63.0" prefHeight="35.0" prefWidth="260.0">
-        <Label prefHeight="25.0" prefWidth="87.0" text="Email: " />
-        <TextField fx:id="email" prefHeight="25.0" prefWidth="244.0" />
-    </HBox>
-    <HBox layoutX="250.0" layoutY="109.0" prefHeight="35.0" prefWidth="249.0">
-        <Label prefHeight="17.0" prefWidth="61.0" text="Telefono: " />
-        <TextField fx:id="telefono" />
-    </HBox>
-    <HBox layoutX="250.0" layoutY="150.0" prefHeight="41.0" prefWidth="291.0">
-        <Label prefHeight="25.0" prefWidth="78.0" text="Direccion: " />
-        <TextField fx:id="direccion" prefHeight="25.0" prefWidth="244.0" />
-    </HBox>
-    <HBox layoutX="628.0" layoutY="14.0" prefHeight="52.0" prefWidth="209.0">
-        <Label prefHeight="25.0" prefWidth="55.0" text="Pais: " />
-        <ChoiceBox fx:id="paises" prefWidth="150.0" />
-    </HBox>
-    <HBox layoutX="614.0" layoutY="115.0" prefHeight="40.0" prefWidth="237.0">
-        <Label prefHeight="25.0" prefWidth="57.0" text="Ciudad:" />
-        <TextField fx:id="ciudad" prefHeight="25.0" prefWidth="170.0" />
-    </HBox>
-    <HBox layoutX="579.0" layoutY="69.0" prefHeight="25.0" prefWidth="224.0">
-        <Label prefHeight="17.0" prefWidth="94.0" text="Codigo Postal: " />
-        <TextField fx:id="codigoPostal" prefHeight="25.0" prefWidth="124.0" />
-    </HBox>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeView?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="535.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suplidor.SuplidorController">
+   <JFXTextField fx:id="nombre" labelFloat="true" layoutX="235.0" layoutY="28.0" onKeyTyped="#buscar" prefHeight="25.0" prefWidth="209.0" promptText="Nombre" style="-fx-background-color: white;" />
+   <JFXTextField fx:id="email" labelFloat="true" layoutX="235.0" layoutY="69.0" prefHeight="25.0" prefWidth="244.0" promptText="Email" style="-fx-background-color: white;" />
+   <JFXTextField fx:id="telefono" labelFloat="true" layoutX="235.0" layoutY="115.0" prefHeight="25.0" prefWidth="149.0" promptText="Telefono" style="-fx-background-color: white;" />
+   <JFXTextField fx:id="direccion" labelFloat="true" layoutX="235.0" layoutY="166.0" prefHeight="25.0" prefWidth="244.0" promptText="Dirección" style="-fx-background-color: white;" />
+   <JFXComboBox fx:id="paises" labelFloat="true" layoutX="506.0" layoutY="41.0" prefHeight="25.0" prefWidth="253.0" promptText="Selecciona pais" style="-fx-background-color: white;" />
+   <JFXTextField fx:id="ciudad" labelFloat="true" layoutX="506.0" layoutY="140.0" prefHeight="25.0" prefWidth="170.0" promptText="Ciudad" style="-fx-background-color: white;" />
+   <JFXTextField fx:id="codigoPostal" labelFloat="true" layoutX="506.0" layoutY="88.0" prefHeight="25.0" prefWidth="124.0" promptText="Código Postal" style="-fx-background-color: white;" />
     <TableView fx:id="tableView" editable="true" layoutX="148.0" layoutY="204.0" prefHeight="303.0" prefWidth="1202.0">
         <columns>
             <TableColumn fx:id="columnaNo" editable="false" maxWidth="80.0" minWidth="70.0" prefWidth="75.0" text="No." />
@@ -48,26 +37,32 @@
     <ImageView fitHeight="170.0" fitWidth="178.0" layoutX="1171.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../resources/suplidoresTabla.png" />
     </ImageView>
-    <ButtonBar layoutX="861.0" layoutY="60.0" prefHeight="53.0" prefWidth="254.0">
+    <ButtonBar layoutX="802.0" layoutY="61.0" prefHeight="68.0" prefWidth="333.0">
         <buttons>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#agregar" prefHeight="57.0" prefWidth="115.0" text="Agregar">
-                <graphic>
-                    <ImageView fitHeight="62.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+         <JFXButton buttonType="RAISED" defaultButton="true" onAction="#agregar" prefHeight="57.0" prefWidth="182.0" style="-fx-background-color: lightgreen;" text="Agregar" textAlignment="CENTER" textFill="WHITE">
+            <graphic>
+                    <ImageView fitHeight="47.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../resources/botonAgregar.png" />
                     </ImageView>
-                </graphic>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#eliminar" prefHeight="57.0" prefWidth="115.0" text="Eliminar">
-                <graphic>
-                    <ImageView fitHeight="58.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../resources/botonEliminar.png" />
-                    </ImageView>
-                </graphic>
-                <tooltip>
-                    <Tooltip text="Seleccione fila a eliminar" />
-                </tooltip>
-            </Button>
+            </graphic>
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </JFXButton>
+         <JFXButton buttonType="RAISED" defaultButton="true" onAction="#eliminar" prefHeight="57.0" prefWidth="182.0" style="-fx-background-color: #E92929;" text="Eliminar" textAlignment="CENTER" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+            <graphic>
+                <ImageView fitHeight="58.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../resources/botonEliminar.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+               <Tooltip text="Seleccione fila a eliminar" />
+            </tooltip>
+         </JFXButton>
         </buttons>
     </ButtonBar>
-    <TreeView fx:id="treeView" layoutX="7.0" layoutY="12.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
+   <JFXTreeView fx:id="treeView" layoutX="17.0" layoutY="22.0" prefHeight="170.0" prefWidth="190.0" showRoot="false" />
 </AnchorPane>

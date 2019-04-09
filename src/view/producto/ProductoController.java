@@ -1,5 +1,9 @@
 package view.producto;
 
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.DoubleValidator;
+import com.jfoenix.validation.IntegerValidator;
 import data.Estatus;
 import data.Producto;
 import javafx.fxml.FXML;
@@ -78,15 +82,15 @@ public class ProductoController implements Initializable {
     private TreeView<String> treeView;
 
     @FXML
-    private TextField nombre;
+    private JFXTextField nombre;
     @FXML
-    private TextArea descripcion;
+    private JFXTextArea descripcion;
     @FXML
-    private TextField unidadesStock;
+    private JFXTextField unidadesStock;
     @FXML
-    private TextField precio;
+    private JFXTextField precio;
     @FXML
-    private TextField codigo;
+    private JFXTextField codigo;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -99,6 +103,19 @@ public class ProductoController implements Initializable {
         tableView.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) ->
                 producto = newValue
         );
+
+        unidadesStock.getValidators().add(new IntegerValidator("Solo numeros naturales"));
+        unidadesStock.focusedProperty().addListener((o, oldValue, newValue) -> {
+            if (!newValue)
+                unidadesStock.validate();
+        });
+
+        precio.getValidators().add(new DoubleValidator("Solo numeros reales"));
+
+        precio.focusedProperty().addListener((o, oldValue, newValue) -> {
+            if (!newValue)
+                precio.validate();
+        });
     }
 
     @FXML
